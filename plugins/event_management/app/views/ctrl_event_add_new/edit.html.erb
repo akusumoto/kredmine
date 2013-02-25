@@ -1,0 +1,6 @@
+<h2><%=l(:label_event_add_new)%></h2>
+
+<%= form_for( @event, { :url => @event, :event => @event, :project_id => @project, :id => 'event-form', :method => "post" }) do |f| %>
+	  <%= render :partial => 'form', :locals => {:form => f} %>
+	  <%= f.submit l(:button_create) %>
+<% end %>

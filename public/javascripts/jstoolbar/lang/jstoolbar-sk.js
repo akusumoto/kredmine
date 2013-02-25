@@ -1,0 +1,16 @@
+jsToolBar.strings = {};
+jsToolBar.strings['Strong'] = 'Tuﾄ肱ﾃｩ';
+jsToolBar.strings['Italic'] = 'Kurzﾃｭva';
+jsToolBar.strings['Underline'] = 'Podﾄ絞arknutﾃｩ';
+jsToolBar.strings['Deleted'] = 'Preﾅ｡krtnutﾃｩ';
+jsToolBar.strings['Code'] = 'Zobrazenie kﾃｳdu';
+jsToolBar.strings['Heading 1'] = 'Zﾃ｡hlavie 1';
+jsToolBar.strings['Heading 2'] = 'Zﾃ｡hlavie 2';
+jsToolBar.strings['Heading 3'] = 'Zﾃ｡hlavie 3';
+jsToolBar.strings['Unordered list'] = 'Zoznam';
+jsToolBar.strings['Ordered list'] = 'Zoradenﾃｽ zoznam';
+jsToolBar.strings['Quote'] = 'Citﾃ｡cia';
+jsToolBar.strings['Unquote'] = 'Odstrﾃ｡nenie citﾃ｡cie';
+jsToolBar.strings['Preformatted text'] = 'Predformﾃ｡tovanﾃｽ text';
+jsToolBar.strings['Wiki link'] = 'Link na Wiki strﾃ｡nku';
+jsToolBar.strings['Image'] = 'Obrﾃ｡zok';

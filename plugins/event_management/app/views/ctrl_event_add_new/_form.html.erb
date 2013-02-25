@@ -1,0 +1,51 @@
+<%= error_messages_for 'event_form' %>
+<div class="box tabular">
+
+	<!-- 題名 -->
+	<p><%= form.text_field :event_subject, :size => 100, :required => true %></p>
+	
+	<!-- 開催日 -->
+	<p>
+	<label for='event_date'><%= l(:field_event_date) %></label>
+	<%= text_field_tag 'event_date', '', :size => 20 %><%= calendar_for('event_date') %>
+	</p>
+
+    <!-- 最寄り駅 -->
+	<p><%= form.text_field :event_place_station, :size => 20 %></p>
+
+	<!-- 場所 -->
+	<p><%= form.text_field :event_place, :size => 100 %></p>
+
+	<!-- 本文 -->
+	<p>
+	<%= form.text_area :event_caption, :class => 'wiki-edit', :required => true %>
+	<%# <%= wikitoolbar_for 'event_caption' %> 
+	</p>
+
+    <!-- このイベントの回答を列挙 -->
+	<!-- 回答欄 -->
+<%
+=begin
+%>
+	<% @group_index = 0 %>
+    <p><label><%= l(:label_event_answer) %></label></p>
+	<% @event.event_answer_datas.each do |itr| %>
+	  <%= render :partial => "setting_answers", :locals => { :event => @event, :answer => itr, :project_id => @project, :group_index => @group_index } %>
+	  <% @group_index = @group_index + 1 %>
+    <%  end %>
+    <!-- 回答項目追加ボタン -->
+    <p> <%= form.submit l(:label_added), :action => "add_answer" %></p>
+<%
+=end
+%>
+	
+    <!-- このプロジェクトに属する全ユーザをグループごとに列挙 -->
+	<p><label><%= l(:label_event_users) %></label></p>
+	<% @now_project_group_list.get_group_users.each do |group| %>
+        <%= render :partial => 'group_users', :locals => {:group => group, :form => form} %>
+    <% end %>
+
+	<!--ファイルを添付-->
+    <p><label><%= l(:label_attachment_plural) %></label></p>
+	<p><%= render :partial => 'attachments/form', :locals => {:container => @message} %></p>
+</div>

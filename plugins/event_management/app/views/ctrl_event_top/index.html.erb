@@ -1,0 +1,42 @@
+<%# 常駐メニュー群..%>
+
+<%# 新規作成.%>
+<div class="contextual">
+  <%= link_to_if_authorized(l(:label_event_add_new), 
+                            {:controller => 'ctrl_event_add_new', :action => 'index', :project_id => @project}, 
+                            :class => 'icon icon-add') %>
+</div>
+</br>
+</br>
+</br>
+<%#===========================================.%>
+<%# リスト本体.%>
+<%#===========================================%>
+<%# リストが空の場合はデータが存在しない旨を伝える%>
+<% if (@now_project_events.blank?) %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+
+<%# 存在する場合は一覧を表示する.%>
+<% else %>
+
+   
+   <table class="list">
+
+   <thead><tr>  
+   <th>#</th> <th><%=h l(:field_subject) %></th>
+   </tr></thead>
+
+   <tbody>
+   <% @now_project_events.each do |itr| %>
+     <tr class="<%= cycle('odd', 'even') %>">
+     <td><%= itr.id %></td>
+     <td><%= link_to(itr.event_subject, {:action=> :show, :project_id => @project, :event_id => itr.id} ) %></td>
+   </tr>
+   <% end %>
+   </tbody>
+
+   </table>
+
+
+
+<% end %>

@@ -1,0 +1,35 @@
+ja:
+#===========================.
+# menus.
+#===========================.
+  label_event_tab_name: イベント
+  
+#===========================.
+# permissons.
+#===========================.
+  permission_view: 閲覧
+  permission_manage: 追加、編集、削除
+
+#===========================.
+# commons.
+#===========================.
+  label_event_add_new: 新たなイベントを発行
+  label_default_answer_yes: 参加
+  label_default_answer_no: 不参加
+  label_event_answer: このイベントの回答覧
+  label_destroy_answer_question: を本当に削除しますか？
+  label_destroy_answer: 回答項目を一件削除しました
+  label_event_users: このイベントの対象者
+  label_non_assigned_group: 未割当グループ
+  label_all_check: 一括ON
+  
+  
+#===========================.
+# filed.
+#===========================.
+  field_event_subject: イベント名
+  field_event_caption: イベント詳細
+  field_event_date: 開催日
+  field_event_place: 開催場所
+  field_event_place_station: 最寄り駅
+  

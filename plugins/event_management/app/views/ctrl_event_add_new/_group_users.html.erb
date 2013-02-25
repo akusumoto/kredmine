@@ -1,0 +1,48 @@
+<form name="group_users">
+<% @child_offset = 10000 %>
+<% @now_group_id = group.get_group %>
+<script>
+  // なんかもう、外部に出さなくてもいいや。これでいいや...
+  $(function(){
+	$("input:checkbox[@name^='groups_check']").click(function(){
+	   var group_id = Number(this.id);
+	   var is_group_cheked = this.checked;
+	   var child_ids = <%=@child_offset%> + group_id;
+	   var child_hash = "child_checks_" + child_ids;
+	   var $checks = $("input[name=" + child_hash + "]");
+	   var test = 0;
+	   $checks.map( 
+		  function(index, el) {
+			  $(this).attr( "checked", is_group_cheked );
+		  }
+	   ); 
+	});
+  });  
+</script>
+  
+<!-- グループ一括チェック -->
+	<p>
+	   <%= check_box :check, :check, {
+				  :checked=>false,
+				  :id => @now_group_id,
+				  :name => "groups_check[]",
+				  :project_id => @project,
+				  :event => @event,
+				  :now_group_id => @now_group_id,
+				  :now_child_offset_val => @child_offset,
+				  :is_check =>  :checked,
+				  :remote => true
+				}
+		%>
+		<%= group.name %>
+	</p>	 
+       
+<!-- グループに属してるユーザー -->
+  <% @now_child_hash = "child_checks_" + ( @now_group_id + @child_offset ).to_s  %>
+  <% group.get_users.each do |user| %>
+	  <p style="text-indent:2em">
+		  <%= check_box "event_check_user_ids", "", { :name => @now_child_hash, :value => user.id } %>
+		  <%= user.name  %>
+	  </p>
+  <% end %> 
+</form>

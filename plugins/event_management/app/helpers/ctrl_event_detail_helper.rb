@@ -1,0 +1,2 @@
+module CtrlEventDetailHelper
+end
