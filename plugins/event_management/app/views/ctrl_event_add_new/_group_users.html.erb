@@ -1,24 +1,24 @@
 <form name="group_users">
-<% @child_offset = 10000 %>
-<% @now_group_id = group.get_group %>
-<script>
-  // なんかもう、外部に出さなくてもいいや。これでいいや...
-  $(function(){
-	$("input:checkbox[@name^='groups_check']").click(function(){
-	   var group_id = Number(this.id);
-	   var is_group_cheked = this.checked;
-	   var child_ids = <%=@child_offset%> + group_id;
-	   var child_hash = "child_checks_" + child_ids;
-	   var $checks = $("input[name=" + child_hash + "]");
-	   var test = 0;
-	   $checks.map( 
-		  function(index, el) {
-			  $(this).attr( "checked", is_group_cheked );
-		  }
-	   ); 
-	});
-  });  
-</script>
+  <% @child_offset = 10000 %>
+  <% @now_group_id = group.get_group %>
+  <script>
+	// なんかもう、外部に出さなくてもいいや。これでいいや...
+	$(function(){
+	  $("input:checkbox[@name^='groups_check']").click(function(){
+		 var group_id = Number(this.id);
+		 var is_group_cheked = this.checked;
+		 var child_ids = <%=@child_offset%> + group_id;
+		 var child_hash = "child_checks_" + child_ids;
+		 var $checks = $("input[name=" + child_hash + "]");
+		 var test = 0;
+		 $checks.map( 
+			function(index, el) {
+				$(this).attr( "checked", is_group_cheked );
+			}
+		 ); 
+	  });
+	});  
+  </script>
   
 <!-- グループ一括チェック -->
 	<p>

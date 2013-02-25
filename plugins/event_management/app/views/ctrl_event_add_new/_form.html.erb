@@ -1,6 +1,6 @@
 <%= error_messages_for 'event_form' %>
 <div class="box tabular">
-
+	
 	<!-- 題名 -->
 	<p><%= form.text_field :event_subject, :size => 100, :required => true %></p>
 	
@@ -24,28 +24,22 @@
 
     <!-- このイベントの回答を列挙 -->
 	<!-- 回答欄 -->
-<%
-=begin
-%>
 	<% @group_index = 0 %>
     <p><label><%= l(:label_event_answer) %></label></p>
 	<% @event.event_answer_datas.each do |itr| %>
-	  <%= render :partial => "setting_answers", :locals => { :event => @event, :answer => itr, :project_id => @project, :group_index => @group_index } %>
+	  <%= render "setting_answers", :event => @event, :answer => itr, :project_id => @project, :group_index => @group_index %>
 	  <% @group_index = @group_index + 1 %>
     <%  end %>
     <!-- 回答項目追加ボタン -->
     <p> <%= form.submit l(:label_added), :action => "add_answer" %></p>
-<%
-=end
-%>
 	
     <!-- このプロジェクトに属する全ユーザをグループごとに列挙 -->
 	<p><label><%= l(:label_event_users) %></label></p>
 	<% @now_project_group_list.get_group_users.each do |group| %>
-        <%= render :partial => 'group_users', :locals => {:group => group, :form => form} %>
+        <%= render "group_users", :group => group, :form => form %>
     <% end %>
 
 	<!--ファイルを添付-->
     <p><label><%= l(:label_attachment_plural) %></label></p>
-	<p><%= render :partial => 'attachments/form', :locals => {:container => @message} %></p>
+	<p><%= render 'attachments/form', :container => @message %></p>
 </div>
