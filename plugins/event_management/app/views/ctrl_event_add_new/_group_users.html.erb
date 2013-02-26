@@ -1,5 +1,4 @@
 <%= javascript_include_tag "check_group_users.js", :plugin => "event_management" %>
-<form name="group_users">
   <% @child_offset = 10000 %>
   <% @now_group_id = group.get_group %>
   <script>
@@ -18,7 +17,9 @@
 				  :now_child_offset_val => @child_offset,
 				  :is_check =>  :checked,
 				  :remote => true
-				}
+				},
+				"1",
+				nil
 		%>
 		<%= group.name %>
 	</p>	 
@@ -27,8 +28,8 @@
   <% @now_child_hash = "child_checks_" + ( @now_group_id + @child_offset ).to_s  %>
   <% group.get_users.each do |user| %>
 	  <p style="text-indent:2em">
-		  <%= check_box "event_check_user_ids", "", { :name => @now_child_hash, :value => user.id } %>
+		  <%#<%= check_box "event_check_user_ids", "", { :name => @now_child_hash, :value => user.id } %>
+		  <%= check_box "", "", { :id => @now_child_hash, :name => "event_check_user_ids[]" }, user.id, nil %>
 		  <%= user.name  %>
 	  </p>
   <% end %> 
-</form>

@@ -39,20 +39,7 @@ class CtrlEventAddNewController < ApplicationController
    	
 		render 'new'
   end
- 
-#---------------------------------------------.
-# 追加メソッド.
-#---------------------------------------------.
- def add
-	  @event = params[:event]
-	  if request.post? and @event.save
-        @yes.save  
-        @no.save
-        flash[:notice] = l(:notice_successful_create)
-        redirect_to :action => 'show', :project_id => @project, :event => @event
-    end
- end
- 
+
 #---------------------------------------------.
 # データ編集画面.
 #---------------------------------------------.
@@ -64,7 +51,13 @@ class CtrlEventAddNewController < ApplicationController
 # データ追加メソッド.
 #---------------------------------------------.
   def add
-     
+    #@event = params[:event]
+	  if request.post? and @event.save
+        @yes.save  
+        @no.save
+        flash[:notice] = l(:notice_successful_create)
+        redirect_to :action => 'show', :project_id => @project, :event => @event
+    end
   end
 
 	
