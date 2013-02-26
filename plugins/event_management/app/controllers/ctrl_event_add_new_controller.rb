@@ -23,21 +23,19 @@ class CtrlEventAddNewController < ApplicationController
 			 puts( "new!!!!" )
        @yes = self.class.helpers.createAnswer_YES()
        @no = self.class.helpers.createAnswer_NO()
-       @event = EventModel.new(params[:event])
-       @event.project_id = @project.id
+			 @event = EventModel.new(params[:event])
        @event.event_answer_datas << @yes
        @event.event_answer_datas << @no
-       @event.event_owner_id = User.current.id
+       @yes.save  
+       @no.save
 		end
-     
+    
 	  # このプロジェクトに属する全ユーザを列挙.
     # グループごとに別リストに詰める.
     if @now_project_group_list.blank? then
         @now_project_group_list = GroupUserList.new
         @now_project_group_list.setup( @project )
     end
-   	
-		render 'new'
   end
 
 #---------------------------------------------.
@@ -51,12 +49,12 @@ class CtrlEventAddNewController < ApplicationController
 # データ追加メソッド.
 #---------------------------------------------.
   def add
-    #@event = params[:event]
-	  if request.post? and @event.save
-        @yes.save  
-        @no.save
-        flash[:notice] = l(:notice_successful_create)
-        redirect_to :action => 'show', :project_id => @project, :event => @event
+		@event = EventModel.new( params[:event_model] )
+		@event.project_id = @project.id
+    @event.event_owner_id = User.current.id
+		if request.post? and @event.save
+       flash[:notice] = l(:notice_successful_create)
+       redirect_to :action => 'show', :project_id => @project, :event => @event
     end
   end
 
@@ -65,7 +63,7 @@ class CtrlEventAddNewController < ApplicationController
 # 回答データ一件削除.
 #---------------------------------------------.
   def delete_answer
-		@event = params[:event]
+		@event = params[:event_model]
 		now_delete_answer = params[:now_delete_answer]
 		@event.event_answer_datas.delete(now_delete_answer)
     now_delete_answer.destroy
