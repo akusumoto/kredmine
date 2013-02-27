@@ -19,24 +19,33 @@
 <%# 存在する場合は一覧を表示する.%>
 <% else %>
 
-   
-   <table class="list">
+	<pre><code class="rhtml">
+	<table class="list">
 
-   <thead><tr>  
-   <th>#</th> <th><%=h l(:field_subject) %></th>
-   </tr></thead>
+	  <thead><tr>  
+	  <th width ="20">#</th> 
+	  <th width ="250"><%=h l(:field_subject) %></th>
+	  <th width ="30"><%=h l(:field_event_owner_id) %></th> 
+	  <th width ="100"><%=h l(:field_event_date) %></th> 
+	  <th width ="50"><%=h l(:field_event_place_station) %></th> 
+	  </tr></thead>
 
-   <tbody>
-   <% @now_project_events.each do |itr| %>
-     <tr class="<%= cycle('odd', 'even') %>">
-     <td><%= itr.id %></td>
-     <td><%= link_to(itr.event_subject, {:action=> :show, :project_id => @project, :event_id => itr.id} ) %></td>
-   </tr>
-   <% end %>
-   </tbody>
+	  <tbody>
+	  <% @now_project_events.each do |itr| %>
+		<tr class="<%= cycle('odd', 'even') %>">
+		  <td ><%= itr.id %></td>
+		  <td><%= link_to(itr.event_subject, {:action=> :show, :project_id => @project, :event_id => itr.id} ) %></td>
+		  <td><%= @now_project_events_users[itr.event_owner_id].name %></td>
+		  <td><%= itr.event_date %></td>
+		  <td><%= itr.event_place_station %> </td>
+		  <%  itr.event_date %>
+		  
+		</tr>
+	  <% end %>
+	  </tbody>
 
-   </table>
-
+	</table>
+	</code></pre>
 
 
 <% end %>
