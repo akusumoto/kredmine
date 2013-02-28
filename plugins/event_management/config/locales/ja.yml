@@ -32,4 +32,5 @@ ja:
   field_event_date: 開催日
   field_event_place: 開催場所
   field_event_place_station: 最寄り駅
+  field_event_owner_id: 開催者
   
