@@ -17,7 +17,7 @@ class CtrlEventAddNewController < ApplicationController
 # 生成メソッド.
 #---------------------------------------------.
   def new
-		@event = params[:event]
+		@event = session[:event]
 		# 生成処理.
     if @event.blank? then
 			 puts( "new!!!!" )
@@ -26,10 +26,12 @@ class CtrlEventAddNewController < ApplicationController
 			 @event = EventModel.new(params[:event])
        @event.event_answer_datas << @yes
        @event.event_answer_datas << @no
-       @yes.save  
-       @no.save
+			 @yes.save
+			 @no.save
 		end
-    
+		
+		session[:event] = @event
+		
 	  # このプロジェクトに属する全ユーザを列挙.
     # グループごとに別リストに詰める.
     if @now_project_group_list.blank? then
@@ -63,12 +65,13 @@ class CtrlEventAddNewController < ApplicationController
 # 回答データ一件削除.
 #---------------------------------------------.
   def delete_answer
-		@event = params[:event_model]
-		now_delete_answer = params[:now_delete_answer]
+		@event = session[:event]
+		@now_delete_ans_id = params[:now_delete_answer]
+		now_delete_answer = @event.event_answer_datas.find( :all, :conditions => ["id = #{@now_delete_ans_id}"] )
 		@event.event_answer_datas.delete(now_delete_answer)
-    now_delete_answer.destroy
+   # now_delete_answer.destroy()
     flash[:notice] = l(:label_destroy_answer)
-		
+    
   # redirect_to :action => 'new', :project_id => @project, :event => @event
 	#	render :action => "new", :event => @event, :project_id => @project
   end

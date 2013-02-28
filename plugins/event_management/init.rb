@@ -12,7 +12,7 @@ Redmine::Plugin.register :event_management do
   project_module :event_management do
     permission :view, 
                :caption => :label_event_rollsettings_view,
-               :ctrl_event_top => [:index, :show ], 
+               :ctrl_event_top => [:index, :show, :clear_data_all ], 
                :ctrl_event_setting => [:index, :show],
                :ctrl_event_detail => [:index, :show],
                :ctrl_event_add_new => [:index, :show]

@@ -8,6 +8,7 @@ class CtrlEventTopController < ApplicationController
 # 初期表示メソッド.
 #---------------------------------------------.
   def index
+		session[:event] = nil
     # このプロジェクトに属する全イベントを取得する.
     @now_project_events = EventModel.find(:all, :conditions => ["project_id = #{@project.id} "])
 		@now_project_events_users = Hash.new
@@ -39,6 +40,14 @@ class CtrlEventTopController < ApplicationController
   end
   
   
+	def clear_data_all
+		EventModel.destroy_all
+		EventAnswerData.destroy_all
+		EventUserAnswer.destroy_all
+		EventUserTable.destroy_all
+	#	EventAnswerTable.destroy_all
+		redirect_to :action => "index", :project_id => @project
+	end
   
 #---------------------------------------------.
 #---------------------------------------------.
