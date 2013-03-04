@@ -1,0 +1,48 @@
+<h2><%= @event.event_subject %></h2>
+
+<%#<p class="author">
+<%#  <% if @event.created_on != @event.updated_on %>
+<%#  <%= l(:label_updated_time, time_tag(@event.updated_on)).html_safe %>
+<%#  <% end %>
+<%#</p>
+%>
+		
+<div class="editable details">
+  <div class="issue">
+	<%# 日時 %>
+	<p>
+	<strong><%= l(:field_event_date) %></strong>
+	<% if @event.event_date? %>
+	  <%= ":" + @event.event_date.to_s(:db) %>
+	<% else %>
+	  <%= ":" + l(:label_not_found_field) %>
+	<%end%>
+	</p>
+
+	<%# 場所 %>
+	<p>
+	<strong><%= l(:field_event_place) %></strong>
+	<%  if @event.event_place? %>
+	  <%= ":" + @event.event_place %>
+	<% else %>
+	  <%= ":" + l(:label_not_found_field) %>
+	<%end%>
+	</p>
+
+
+	<%# 最寄り駅 %>
+	<p>
+	<strong><%= l(:field_event_place_station) %></strong>
+	<%  if @event.event_place_station %>
+	  <%= ":" + @event.event_place_station %>
+	<%  end %>
+	</p>
+
+	<%# 詳細 %>
+	<div class="description">
+	  <div class="wiki">
+		<%= textilizable @event.event_caption %>	
+	  </div>
+    </div>
+  </div>
+</div>
