@@ -41,11 +41,11 @@ class CtrlEventTopController < ApplicationController
   
   
 	def clear_data_all
+		#EventAnswerTable.destroy_all
 		EventModel.destroy_all
 		EventAnswerData.destroy_all
 		EventUserAnswer.destroy_all
 		EventUserTable.destroy_all
-	#	EventAnswerTable.destroy_all
 		redirect_to :action => "index", :project_id => @project
 	end
   

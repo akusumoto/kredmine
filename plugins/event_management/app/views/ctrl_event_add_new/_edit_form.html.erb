@@ -7,7 +7,7 @@
 	<!-- 開催日 -->
 	<p>
 	<label for='event_date'><%= l(:field_event_date) %></label>
-	<%= text_field_tag 'event_date', '', :size => 20 %><%= calendar_for('event_date') %>
+	<%= text_field_tag "event_date", "", :size => 10 %><%= calendar_for('event_date') %>
 	</p>
 
     <!-- 最寄り駅 -->
@@ -31,7 +31,14 @@
 	  <% @group_index = @group_index + 1 %>
     <%  end %>
     <!-- 回答項目追加ボタン -->
-    <p> <%= form.submit l(:label_added), :action => "add_answer" %></p>
+    <p> 
+	  <%= form.submit l(:label_added), 
+		  :action => "add_answer", 
+		  :remote => true, 
+		  :project_id => @project, 
+		  :event => @event 
+	  %>
+	</p>
 	
     <!-- このプロジェクトに属する全ユーザをグループごとに列挙 -->
 	<p><label><%= l(:label_event_users) %></label></p>

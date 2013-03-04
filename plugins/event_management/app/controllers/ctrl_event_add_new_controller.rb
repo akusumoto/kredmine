@@ -9,6 +9,7 @@ class CtrlEventAddNewController < ApplicationController
 # 初期表示メソッド.
 #---------------------------------------------.
   def index
+		session[:event] = nil
 		redirect_to :action => 'new', :project_id => @project
 	 #render "new", :project_id => @project
   end
@@ -54,10 +55,28 @@ class CtrlEventAddNewController < ApplicationController
 		@event = EventModel.new( params[:event_model] )
 		@event.project_id = @project.id
     @event.event_owner_id = User.current.id
+		#@event.updated_on = Time.now.to_date
+		#@event.created_on = @event.updated_on
+		puts( @event.event_date )
 		if request.post? and @event.save
        flash[:notice] = l(:notice_successful_create)
-       redirect_to :action => 'show', :project_id => @project, :event => @event
     end
+		redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
+  end
+
+	
+	  
+#---------------------------------------------.
+# 回答データ一件追加.
+#---------------------------------------------.
+  def add_answer
+		@event = session[:event]
+		new_answer = self.class.helpers.createAnswer_Empty()
+		@event.event_answer_datas << new_answer
+		new_answer.save
+    flash[:notice] = l(:label_add_answer)
+	#	render :action => 'new', :project_id => @project, :event => @event
+		#redirect_to :action => 'new', :project_id => @project, :event => @event
   end
 
 	
@@ -71,18 +90,10 @@ class CtrlEventAddNewController < ApplicationController
 		@event.event_answer_datas.delete(now_delete_answer)
    # now_delete_answer.destroy()
     flash[:notice] = l(:label_destroy_answer)
-    
-  # redirect_to :action => 'new', :project_id => @project, :event => @event
+    redirect_to :action => 'new', :project_id => @project, :event => @event
 	#	render :action => "new", :event => @event, :project_id => @project
   end
 
-  
-#---------------------------------------------.
-# 回答データ一件追加.
-#---------------------------------------------.
-  def add_answer
-    
-  end
 
 
 

@@ -16,13 +16,15 @@ ja:
   label_event_add_new: 新たなイベントを発行
   label_default_answer_yes: 参加
   label_default_answer_no: 不参加
+  label_default_answer_empty: 回答
   label_event_answer: このイベントの回答覧
   label_destroy_answer_question: を本当に削除しますか？
   label_destroy_answer: 回答項目を一件削除しました
   label_event_users: このイベントの対象者
   label_non_assigned_group: 未割当グループ
   label_all_check: 一括ON
-  
+  label_not_found_field: 未定
+    
   
 #===========================.
 # filed.

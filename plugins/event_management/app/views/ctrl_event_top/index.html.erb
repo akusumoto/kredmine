@@ -26,7 +26,6 @@
 	<table class="list">
 
 	  <thead><tr>  
-	  <th width ="20">#</th> 
 	  <th width ="250"><%=h l(:field_subject) %></th>
 	  <th width ="30"><%=h l(:field_event_owner_id) %></th> 
 	  <th width ="100"><%=h l(:field_event_date) %></th> 
@@ -36,8 +35,8 @@
 	  <tbody>
 	  <% @now_project_events.each do |itr| %>
 		<tr class="<%= cycle('odd', 'even') %>">
-		  <td ><%= itr.id %></td>
-		  <td><%= link_to(itr.event_subject, {:action=> :show, :project_id => @project, :event_id => itr.id} ) %></td>
+		  <td><%= link_to(itr.event_subject, 
+				  {:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
 		  <td><%= @now_project_events_users[itr.event_owner_id].name %></td>
 		  <td><%= itr.event_date %></td>
 		  <td><%= itr.event_place_station %> </td>

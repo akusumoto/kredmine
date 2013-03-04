@@ -16,6 +16,16 @@ module CtrlEventAddNewHelper
     now_answer.answer_subject = l(:label_default_answer_no)
     return now_answer
   end
+
+#---------------------------------------------.
+# 「空のモデル」モデル生成.
+#---------------------------------------------.
+  def createAnswer_Empty()
+    now_answer = EventAnswerData.new
+    now_answer.answer_subject = l(:label_default_answer_empty)
+    return now_answer
+  end
+	
 	
 	def remote_function(options)
     ("$.ajax({url: '#{ url_for(options[:url]) }', type: '#{ options[:method] || 'GET' }', " +
