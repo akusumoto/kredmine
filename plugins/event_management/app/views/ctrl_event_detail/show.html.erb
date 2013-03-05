@@ -11,7 +11,7 @@
 	<p>
 	<strong><%= l(:field_event_date) %></strong>
 	<% if @event.event_date? %>
-	  <%= ":" + @event.event_date.to_s(:db) %>
+	  <%= ":" + @event.event_date.to_date.to_s(:db) %>
 	<% else %>
 	  <%= ":" + l(:label_not_found_field) %>
 	<%end%>
