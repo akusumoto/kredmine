@@ -9,7 +9,8 @@ class CtrlEventAddNewController < ApplicationController
 # 初期表示メソッド.
 #---------------------------------------------.
   def index
-		session[:event] = nil
+	#	session[:event] = nil
+		$g_event = nil
 		redirect_to :action => 'new', :project_id => @project
 	 #render "new", :project_id => @project
   end
@@ -18,7 +19,8 @@ class CtrlEventAddNewController < ApplicationController
 # 生成メソッド.
 #---------------------------------------------.
   def new
-		@event = session[:event]
+		#@event = session[:event]
+		@event = $g_event
 		# 生成処理.
     if @event.blank? then
 			 puts( "new!!!!" )
@@ -30,8 +32,8 @@ class CtrlEventAddNewController < ApplicationController
 			 @yes.save
 			 @no.save
 		end
-		
-		session[:event] = @event
+	#	session[:event] = @event
+		$g_event = @event
 		
 	  # このプロジェクトに属する全ユーザを列挙.
     # グループごとに別リストに詰める.
@@ -57,7 +59,6 @@ class CtrlEventAddNewController < ApplicationController
     @event.event_owner_id = User.current.id
 		@event.updated_on = Time.now.to_datetime
 		@event.created_on = @event.updated_on
-		puts( @event.event_date )
 		if request.post? and @event.save
        flash[:notice] = l(:notice_successful_create)
     end
@@ -70,12 +71,13 @@ class CtrlEventAddNewController < ApplicationController
 # 回答データ一件追加.
 #---------------------------------------------.
   def add_answer
-		@event = session[:event]
+	#	@event = session[:event]
+		@event = $g_event
 		new_answer = self.class.helpers.createAnswer_Empty()
 		@event.event_answer_datas << new_answer
 		new_answer.save
     flash[:notice] = l(:label_add_answer)
-	#	render :action => 'new', :project_id => @project, :event => @event
+		redirect_to :action => 'new', :project_id => @project, :event => @event
 		#redirect_to :action => 'new', :project_id => @project, :event => @event
   end
 
@@ -84,7 +86,8 @@ class CtrlEventAddNewController < ApplicationController
 # 回答データ一件削除.
 #---------------------------------------------.
   def delete_answer
-		@event = session[:event]
+		#@event = session[:event]
+		@event = $g_event
 		@now_delete_ans_id = params[:now_delete_answer]
 		now_delete_answer = @event.event_answer_datas.find( :all, :conditions => ["id = #{@now_delete_ans_id}"] )
 		@event.event_answer_datas.delete(now_delete_answer)

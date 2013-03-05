@@ -33,13 +33,12 @@
     <% end %>
 	
     <!-- 回答項目追加ボタン -->
-    <p> 
-	  <%= form.submit l(:label_added), 
+	<p>
+	<%= link_to l(:label_added), 
 		  :action => "add_answer", 
-		  :remote => true, 
 		  :project_id => @project, 
 		  :event => @event 
-	  %>
+	%>
 	</p>
 	
     <!-- このプロジェクトに属する全ユーザをグループごとに列挙 -->
