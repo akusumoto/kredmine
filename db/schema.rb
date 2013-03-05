@@ -205,14 +205,17 @@ ActiveRecord::Schema.define(:version => 20121026003537) do
   end
 
   create_table "event_models", :force => true do |t|
-    t.integer "project_id",                     :null => false
-    t.integer "event_owner_id",                 :null => false
-    t.string  "event_subject"
-    t.date    "event_date"
-    t.string  "event_place_station"
-    t.string  "event_place"
-    t.integer "event_return_request_mail_type"
-    t.text    "event_caption"
+    t.integer  "project_id",                     :null => false
+    t.integer  "event_owner_id",                 :null => false
+    t.string   "event_subject"
+    t.datetime "event_date"
+    t.string   "str_event_date"
+    t.datetime "updated_on"
+    t.datetime "created_on"
+    t.string   "event_place_station"
+    t.string   "event_place"
+    t.integer  "event_return_request_mail_type"
+    t.text     "event_caption"
   end
 
   create_table "event_user_answers", :force => true do |t|
@@ -225,7 +228,7 @@ ActiveRecord::Schema.define(:version => 20121026003537) do
 
   create_table "event_user_tables", :force => true do |t|
     t.integer "event_model_id"
-    t.integer "user_id"
+    t.integer "event_user_id"
   end
 
   create_table "event_users", :force => true do |t|

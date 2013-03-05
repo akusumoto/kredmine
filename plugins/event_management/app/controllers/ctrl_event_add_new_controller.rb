@@ -55,8 +55,8 @@ class CtrlEventAddNewController < ApplicationController
 		@event = EventModel.new( params[:event_model] )
 		@event.project_id = @project.id
     @event.event_owner_id = User.current.id
-		#@event.updated_on = Time.now.to_date
-		#@event.created_on = @event.updated_on
+		@event.updated_on = Time.now.to_datetime
+		@event.created_on = @event.updated_on
 		puts( @event.event_date )
 		if request.post? and @event.save
        flash[:notice] = l(:notice_successful_create)

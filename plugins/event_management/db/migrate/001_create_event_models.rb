@@ -5,13 +5,15 @@ class CreateEventModels < ActiveRecord::Migration
       t.column :project_id, :integer, :null => false
       t.column :event_owner_id, :integer, :null => false
       t.column :event_subject, :string
-      t.column :event_date, :datetime
+     	t.column :event_date, :datetime
+		  t.column :str_event_date, :string
 			t.column :updated_on, :datetime
 			t.column :created_on, :datetime
 			t.column :event_place_station, :string
       t.column :event_place, :string
       t.column :event_return_request_mail_type, :integer
       t.column :event_caption, :text
+			t.column :last_update_user_id, :integer
     end
   end
   def self.down

@@ -7,6 +7,7 @@ class CtrlEventDetailController < ApplicationController
 	
 	def show
 		@event = EventModel.find( params[:event] )
+		@event_owner = User.find(@event.event_owner_id)
   end
 
 	

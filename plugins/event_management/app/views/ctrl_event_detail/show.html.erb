@@ -1,11 +1,9 @@
 <h2><%= @event.event_subject %></h2>
 
-<%#<p class="author">
-<%#  <% if @event.created_on != @event.updated_on %>
-<%#  <%= l(:label_updated_time, time_tag(@event.updated_on)).html_safe %>
-<%#  <% end %>
-<%#</p>
-%>
+<p class="author">
+  <%= l(:label_added_time, @event_owner.name + " が" + format_time(@event.created_on) ).html_safe %>
+</p>
+
 		
 <div class="editable details">
   <div class="issue">
