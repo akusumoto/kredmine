@@ -1,4 +1,13 @@
-<%= error_messages_for 'edit_form' %>
+<% if @event.errors.count > 0 %>
+<div id='errorExplanation'>
+  <ul>                
+    <% @event.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>      
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
 <div class="box tabular">
 	
 	<!-- 題名 -->

@@ -59,10 +59,20 @@ class CtrlEventAddNewController < ApplicationController
     @event.event_owner_id = User.current.id
 		@event.updated_on = Time.now.to_datetime
 		@event.created_on = @event.updated_on
+
+		puts( @event.event_answer_datas.count )
+		
 		if request.post? and @event.save
-       flash[:notice] = l(:notice_successful_create)
-    end
-		redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
+			  $g_event = nil
+				flash[:notice] = l(:notice_successful_create)
+				redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
+		else
+				$g_event = @event
+				@now_project_group_list = GroupUserList.new
+        @now_project_group_list.setup( @project )
+				
+				render :action => "new", :project_id => @project, :event => @event
+		end
   end
 
 	
