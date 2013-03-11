@@ -1,3 +1,4 @@
+# encoding: utf-8
 class CtrlEventAddNewController < ApplicationController
 	unloadable
   menu_item :event_menu
