@@ -1,0 +1,32 @@
+<!-- 回答欄 -->
+<p><label><%= l(:label_event_answer) %></label></p>
+
+<% @group_index = 0 %>
+<% @event.event_answer_datas.each do |itr| %>
+  <%= fields_for itr do |f| %>
+	<p>
+		  <!-- 回答項目 -->
+		  <%= f.text_field :answer_subject, :size => "10" %>
+		
+		  <%= link_to l(:label_deleted), 
+			  {
+				:project_id => @project,
+				:now_delete_answer => itr.id,
+				:remote => true,
+				:action => "delete_answer"
+			  }
+		  %>
+	  </p>
+	<% end %>
+  <% @group_index = @group_index + 1 %>
+<% end %>
+	  
+<!-- 回答項目追加ボタン -->
+<p>
+<%= link_to l(:label_added), 
+	  :action => "add_answer", 
+	  :project_id => @project, 
+	  :event => @event,
+	  :remote => true
+%>
+</p>

@@ -25,11 +25,15 @@ class CtrlEventAddNewController < ApplicationController
 		# 生成処理.
     if @event.blank? then
 			 puts( "new!!!!" )
-       @yes = self.class.helpers.createAnswer_YES()
-       @no = self.class.helpers.createAnswer_NO()
-			 @event = EventModel.new(params[:event])
+			 # デフォ回答を生成.
+       @event = EventModel.new(params[:event])
+			 @yes = self.class.helpers.createAnswer_YES()
+			 @no = self.class.helpers.createAnswer_NO()
        @event.event_answer_datas << @yes
        @event.event_answer_datas << @no
+			 # @note 
+			 # どうもセーブしないとidが振られない？ようで、delete_answerの時にidによるfindでこけてしまう模様.
+			 # 何かid以外にfindの方法があればいいんだが...ひとまずsaveは残しておく.
 			 @yes.save
 			 @no.save
 		end
@@ -55,19 +59,22 @@ class CtrlEventAddNewController < ApplicationController
 # データ追加メソッド.
 #---------------------------------------------.
   def add
+		# 戻ってきたハッシュデータを元にイベント再構築.
 		@event = EventModel.new( params[:event_model] )
 		@event.project_id = @project.id
     @event.event_owner_id = User.current.id
 		@event.updated_on = Time.now.to_datetime
 		@event.created_on = @event.updated_on
 
-		puts( @event.event_answer_datas.count )
-		
+		# セーブが成功したかチェック.
 		if request.post? and @event.save
+				# 成功したらそのまま詳細画面に飛ばす.
 			  $g_event = nil
 				flash[:notice] = l(:notice_successful_create)
 				redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
+		# セーブが失敗していればエラーメッセージ描画.
 		else
+				# 再リクエストで情報が吹っ飛んでしまうので再セットアップ.
 				$g_event = @event
 				@now_project_group_list = GroupUserList.new
         @now_project_group_list.setup( @project )
@@ -86,9 +93,14 @@ class CtrlEventAddNewController < ApplicationController
 		@event = $g_event
 		new_answer = self.class.helpers.createAnswer_Empty()
 		@event.event_answer_datas << new_answer
+		
+		# @note 
+		# どうもセーブしないとidが振られない？ようで、delete_answerの時にidによるfindでこけてしまう模様.
+		# 何かid以外にfindの方法があればいいんだが...ひとまずsaveは残しておく.
 		new_answer.save
-    flash[:notice] = l(:label_add_answer)
-		redirect_to :action => 'new', :project_id => @project, :event => @event
+    
+		flash[:notice] = l(:label_add_answer)
+	#	redirect_to :action => 'new', :project_id => @project, :event => @event
 		#redirect_to :action => 'new', :project_id => @project, :event => @event
   end
 
@@ -103,9 +115,12 @@ class CtrlEventAddNewController < ApplicationController
 		now_delete_answer = @event.event_answer_datas.find( :all, :conditions => ["id = #{@now_delete_ans_id}"] )
 		@event.event_answer_datas.delete(now_delete_answer)
    # now_delete_answer.destroy()
+		@now_project_group_list = GroupUserList.new
+    @now_project_group_list.setup( @project )
+		
     flash[:notice] = l(:label_destroy_answer)
-    redirect_to :action => 'new', :project_id => @project, :event => @event
-	#	render :action => "new", :event => @event, :project_id => @project
+  #  redirect_to :action => 'new', :project_id => @project, :event => @event
+	#  render :action => 'new', :project_id => @project, :event => @event
   end
 
 
