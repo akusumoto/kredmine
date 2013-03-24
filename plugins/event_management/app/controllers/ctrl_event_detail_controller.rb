@@ -24,23 +24,22 @@ class CtrlEventDetailController < ApplicationController
 		@event_this_answer = get_this_user_answer( @event );
 		@now_project_group_list = create_user_datas( @project, @event );
 		bind_user_answer( @event );
-		
 		form_data = params[:event_user_answer]
 		if ( @event_this_answer.update_attributes!( form_data ) )
 #			puts( @event_this_answer.comment )
 		else
 #			puts( "failed update" )
 #			puts( @event_this_answer.comment )
-			render :action => "show", :project_id => @project, :event => @event
 		end
 		
+		redirect_to :action => "show", :event => @event, :project_id => @project
 	end
 	
 	
 	# 回答情報とユーザーを関連付け.
 	def bind_user_answer( event )
-		puts( "bind!!" )
-		puts( event.id )
+		#puts( "bind!!" )
+		#puts( event.id )
 					
 		@now_project_group_list.get_group_users.each do |group|
 			group.get_users.each do |user|
