@@ -26,10 +26,10 @@
        
 <!-- グループに属してるユーザー -->
   <% @now_child_hash = "child_checks_" + ( @now_group_id + @child_offset ).to_s  %>
-	  <p style="text-indent:2em">
-        <% group.get_users.each do |itr| %>
-          <%#<%= check_box "event_check_user_ids", "", { :name => @now_child_hash, :value => user.id } %>
-		  <%= check_box "", "", { :id => @now_child_hash, :name => "event_check_user_ids[]", :checked => itr.is_check }, itr.user.id, nil %>
-		  <%= itr.user.name  %>
-        <% end %>
-      </p>
+  <p style="text-indent:2em">
+	<% group.get_users.each do |itr| %>
+	  <%#<%= check_box "event_check_user_ids", "", { :name => @now_child_hash, :value => user.id } %>
+	  <%= check_box "", "", { :id => @now_child_hash, :name => "event_check_user_ids[]", :checked => itr.is_check }, itr.user.id, nil %>
+	  <%= itr.user.name  %>
+	<% end %>
+  </p>

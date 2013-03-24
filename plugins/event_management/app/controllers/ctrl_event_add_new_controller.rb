@@ -1,10 +1,13 @@
 # encoding: utf-8
 class CtrlEventAddNewController < ApplicationController
+	require_relative "../helpers/ctrl_util_helper.rb"
+	#include UtilHelper
+	
 	unloadable
   menu_item :event_menu
   before_filter :find_project, :authorize, :except => []
   layout 'standard'
-
+	
 
 #---------------------------------------------.
 # 初期表示メソッド.
@@ -37,7 +40,7 @@ class CtrlEventAddNewController < ApplicationController
 		
 	  # このプロジェクトに属する全ユーザを列挙.
     # グループごとに別リストに詰める.
-    setup_user_datas();
+    @now_project_group_list = create_user_datas_new( @project, @event );
   end
 
 #---------------------------------------------.
@@ -91,7 +94,8 @@ class CtrlEventAddNewController < ApplicationController
 		else
 				# 再リクエストで情報が吹っ飛んでしまうので再セットアップ.
 				$g_event = @event
-		  	setup_user_datas()
+		  	@now_project_group_list = create_user_datas_new( @project, @event );
+
 				
 				render :action => "new", :project_id => @project, :event => @event
 		end
@@ -129,21 +133,77 @@ class CtrlEventAddNewController < ApplicationController
 			@event.event_answer_datas.delete(now_delete_answer)
 		end
 		
-   	setup_user_datas()
+		@now_project_group_list = create_user_datas_new( @project, @event );
   end
 
 	
 #---------------------------------------------.
-# 以下ヘルパー行き予定.
+# プレビュー.
 #---------------------------------------------.
-	def setup_user_datas()
-		if @now_project_group_list.blank? then
-			@now_project_group_list = EventGroupList.new
-			@now_project_group_list.setup( @project, @event )
+  def preview
+    @text = params[:event][:event_caption]
+    render :partial => 'common/preview'
+  end
+  
+private
+  def find_project
+    @project = Project.find(params[:project_id])
+    rescue ActiveRecord::RecordNotFound
+      render_404
+  end
+	
+	
+	def create_user_datas_new(project, event)
+		list = create_user_datas(project, event)
+		list.get_group_users.each do |group|
+			group.get_users.each do |itr|
+				if ( itr.user.id == User.current.id )
+					group.get_users.delete( itr )
+					return list;
+				end
+			end
 		end
+		return list;
+	end
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+#---------------------------------------------.
+# 以下ヘルパー移動予定.
+#---------------------------------------------.
+	
+	
+	
+#---------------------------------.
+# 関数達.
+#---------------------------------.
+	def create_user_datas( project, event )
+		list = EventGroupList.new
+		list.setup( project, event )
+		return list;
 	end
 
 
+
+#---------------------------------.
+# ユーザー.
+#---------------------------------.
 	class EventGroupUser
 		def setup( user_a, is_check_a )
 			@user = user_a
@@ -157,8 +217,25 @@ class CtrlEventAddNewController < ApplicationController
 		def user
 			return @user
 		end
+		
+		def set_answer( user_answer, answer_data )
+			@user_answer = user_answer
+			@answer_data = answer_data
+		end
+		
+		def get_user_answer
+			return @user_answer
+		end
+
+		def get_answer_data
+			return @answer_data
+		end
+		
 	end
 	
+#---------------------------------.
+# イベントグループ.
+#---------------------------------.
   class EventGroup
     def setup( group_id, name )
       @group = group_id
@@ -167,16 +244,11 @@ class CtrlEventAddNewController < ApplicationController
     end
     
     def add( user, is_check )
-			# @note ここに書いていいのか？.
-			if user.id == User.current.id
-				then return;
-			end
-			
 			new_user = EventGroupUser.new 
 			new_user.setup( user, is_check )
 			@users << new_user
     end
-    
+		
     def get_group
       return @group
     end
@@ -191,10 +263,13 @@ class CtrlEventAddNewController < ApplicationController
     
    end
   
+#---------------------------------.
+# イベントグループリスト.
+#---------------------------------.
   class EventGroupList
     
      def setup( project, event )
-      @users = Hash.new
+			@users = Hash.new
       @group_users = Array.new
       group_users_check = Hash.new
       @now_users = Project.find(project.id).principals.find(:all)
@@ -240,25 +315,9 @@ class CtrlEventAddNewController < ApplicationController
     def get_group_users
       return @group_users
     end
-    
-    def get_users
-      return @users
-    end
-    
-  end
-  
-#---------------------------------------------.
-# プレビュー.
-#---------------------------------------------.
-  def preview
-    @text = params[:event][:event_caption]
-    render :partial => 'common/preview'
-  end
-  
-private
-  def find_project
-    @project = Project.find(params[:project_id])
-    rescue ActiveRecord::RecordNotFound
-      render_404
-  end
+		
+		def get_users
+			return @users
+		end
+	end	
 end

@@ -32,6 +32,9 @@ ja:
   label_answer_select: 回答選択
   label_answer_memo: メモ
   label_answer_button: 回答する
+  label_answer_list_title: イベント回答状況
+  label_non_answer: 未回答
+  
   
 #===========================.
 # filed.

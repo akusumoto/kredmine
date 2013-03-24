@@ -64,6 +64,23 @@
   </div>
   
   
-  <%# %>
+  <%# 回答状況一覧 %>
+  <h3><%= l(:label_answer_list_title) %></strong></h3>
+  <hr>
+  <% @now_project_group_list.get_group_users.each do |group| %>
+	<h4><%= group.name %> </h4>
+	<% group.get_users.each do |itr| %>
+	  <p>
+		<%= itr.user.name %>
+		<% if itr.get_answer_data != nil %>
+		  <strong><%= itr.get_answer_data.answer_subject %></strong>
+		  <%= "　　　　" %><%= itr.get_user_answer.comment %>
+		<%else%>
+		  <%= l(:label_non_answer) %>
+		<%end%>
+	  </p>
+	<% end %>
+
+  <% end %>
   
 </div>

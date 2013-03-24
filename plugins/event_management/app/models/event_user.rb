@@ -7,4 +7,6 @@ class EventUser < ActiveRecord::Base
 		new_user.user_id = id
 		return new_user
 	end
+	
+	
 end
