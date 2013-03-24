@@ -26,10 +26,10 @@
 	<table class="list">
 
 	  <thead><tr>  
-	  <th width ="250"><%=h l(:field_subject) %></th>
-	  <th width ="30"><%=h l(:field_event_owner_id) %></th> 
-	  <th width ="100"><%=h l(:field_event_date) %></th> 
-	  <th width ="50"><%=h l(:field_event_place_station) %></th> 
+	  <th width ="100"><%=h l(:field_subject) %></th>
+	  <th width ="1"><%=h l(:field_event_date) %></th> 
+	  <th width ="1"><%=h l(:field_event_owner_id) %></th> 
+	  <th width ="1"><%=h l(:field_event_place_station) %></th> 
 	  </tr></thead>
 
 	  <tbody>
@@ -37,11 +37,9 @@
 		<tr class="<%= cycle('odd', 'even') %>">
 		  <td><%= link_to(itr.event_subject, 
 				  {:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
+		  <td><%= itr.event_date.to_date.to_s(:db) %></td>
 		  <td><%= @now_project_events_users[itr.event_owner_id].name %></td>
-		  <td><%= itr.event_date %></td>
 		  <td><%= itr.event_place_station %> </td>
-		  <%  itr.event_date %>
-		  
 		</tr>
 	  <% end %>
 	  </tbody>

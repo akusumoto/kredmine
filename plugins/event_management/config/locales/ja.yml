@@ -26,17 +26,19 @@ ja:
   label_all_check: 一括ON
   label_not_found_field: 未定
   label_added_time: "%{value}に追加"
-  
+  label_answer_condition: 回答状況
+  label_answer_num: 回答数
+  label_answer_value: "%{now}/%{max}"
  
     
   
 #===========================.
 # filed.
 #===========================.
-  field_event_subject: イベント名
-  field_event_caption: イベント詳細
-  field_event_date: 開催日
-  field_event_place: 開催場所
+  field_event_subject: 題名
+  field_event_caption: 詳細
+  field_event_date: イベント日
+  field_event_place: 場所
   field_event_place_station: 最寄り駅
   field_event_owner_id: 開催者
   
