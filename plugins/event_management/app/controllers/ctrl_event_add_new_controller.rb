@@ -31,21 +31,13 @@ class CtrlEventAddNewController < ApplicationController
 			 @no = self.class.helpers.createAnswer_NO()
        @event.event_answer_datas << @yes
        @event.event_answer_datas << @no
-			 # @note 
-			 # どうもセーブしないとidが振られない？ようで、delete_answerの時にidによるfindでこけてしまう模様.
-			 # 何かid以外にfindの方法があればいいんだが...ひとまずsaveは残しておく.
-			 @yes.save
-			 @no.save
 		end
 	#	session[:event] = @event
 		$g_event = @event
 		
 	  # このプロジェクトに属する全ユーザを列挙.
     # グループごとに別リストに詰める.
-    if @now_project_group_list.blank? then
-        @now_project_group_list = GroupUserList.new
-        @now_project_group_list.setup( @project )
-    end
+    setup_user_datas();
   end
 
 #---------------------------------------------.
@@ -60,14 +52,39 @@ class CtrlEventAddNewController < ApplicationController
 #---------------------------------------------.
   def add
 		# 戻ってきたハッシュデータを元にイベント再構築.
-		@event = EventModel.new( params[:event_model] )
+		form_data = params[:event_model]
+		@event = EventModel.new( form_data )
 		@event.project_id = @project.id
     @event.event_owner_id = User.current.id
 		@event.updated_on = Time.now.to_datetime
 		@event.created_on = @event.updated_on
-
+		
+		# 回答情報セットアップ.
+		# @note もうこれでいいや...
+		event_subjects = params[:answer_subjects]
+		event_subjects.each do |itr|
+			new_answer = EventAnswerData.new
+			new_answer.answer_subject = itr
+			@event.event_answer_datas << new_answer
+		end
+		
+		# 回答者セットアップ.
+		event_check_user_ids = params[:event_check_user_ids]
+		if event_check_user_ids != nil 
+			event_check_user_ids.each do |itr|
+				new_user = EventUser.new
+				new_user.user_id = itr
+				@event.event_users << new_user
+			end
+		end
+		
 		# セーブが成功したかチェック.
-		if request.post? and @event.save
+		#is_success = ( request.post? and form_answers.length > 0 and @event.save )
+		is_exist_event_check_user = event_check_user_ids != nil && event_check_user_ids.length > 0
+		is_exist_answer_data = event_subjects != nil && event_subjects.length > 0
+		is_success = ( request.post? && @event.save && is_exist_event_check_user && is_exist_answer_data )
+		
+		if is_success
 				# 成功したらそのまま詳細画面に飛ばす.
 			  $g_event = nil
 				flash[:notice] = l(:notice_successful_create)
@@ -76,8 +93,7 @@ class CtrlEventAddNewController < ApplicationController
 		else
 				# 再リクエストで情報が吹っ飛んでしまうので再セットアップ.
 				$g_event = @event
-				@now_project_group_list = GroupUserList.new
-        @now_project_group_list.setup( @project )
+		  	setup_user_datas()
 				
 				render :action => "new", :project_id => @project, :event => @event
 		end
@@ -93,15 +109,6 @@ class CtrlEventAddNewController < ApplicationController
 		@event = $g_event
 		new_answer = self.class.helpers.createAnswer_Empty()
 		@event.event_answer_datas << new_answer
-		
-		# @note 
-		# どうもセーブしないとidが振られない？ようで、delete_answerの時にidによるfindでこけてしまう模様.
-		# 何かid以外にfindの方法があればいいんだが...ひとまずsaveは残しておく.
-		new_answer.save
-    
-		flash[:notice] = l(:label_add_answer)
-	#	redirect_to :action => 'new', :project_id => @project, :event => @event
-		#redirect_to :action => 'new', :project_id => @project, :event => @event
   end
 
 	
@@ -112,29 +119,47 @@ class CtrlEventAddNewController < ApplicationController
 		#@event = session[:event]
 		@event = $g_event
 		@now_delete_ans_id = params[:now_delete_answer]
-		now_delete_answer = @event.event_answer_datas.find( :all, :conditions => ["id = #{@now_delete_ans_id}"] )
+		now_delete_answer = @event.event_answer_datas.find( @now_delete_ans_id )
 		@event.event_answer_datas.delete(now_delete_answer)
    # now_delete_answer.destroy()
-		@now_project_group_list = GroupUserList.new
-    @now_project_group_list.setup( @project )
-		
-    flash[:notice] = l(:label_destroy_answer)
-  #  redirect_to :action => 'new', :project_id => @project, :event => @event
-	#  render :action => 'new', :project_id => @project, :event => @event
+		setup_user_datas()
   end
 
 
+	def setup_user_datas()
+	  if @now_project_group_list.blank? then
+        @now_project_group_list = GroupUserList.new
+        @now_project_group_list.setup( @project, @event )
+    end
+	end
 
-
-   class GroupUser
+	# 名前が段々適当になっていく...
+	class GroupInUser
+		def setup( user_a, is_check_a )
+			@user = user_a
+			@is_check = is_check_a
+		end
+		
+		def is_check
+			return @is_check
+		end
+		
+		def user
+			return @user
+		end
+	end
+	
+  class GroupUser
     def setup( group_id, name )
       @group = group_id
       @users = Array.new
       @name = name
     end
     
-    def add( user )
-      @users << user
+    def add( user, is_check )
+			new_user = GroupInUser.new 
+			new_user.setup( user, is_check )
+			@users << new_user
     end
     
     def get_group
@@ -153,7 +178,7 @@ class CtrlEventAddNewController < ApplicationController
   
   class GroupUserList
     
-     def setup( project )
+     def setup( project, event )
       @users = Hash.new
       @group_users = Array.new
       group_users_check = Hash.new
@@ -184,7 +209,7 @@ class CtrlEventAddNewController < ApplicationController
               end
             end
           end
-          now_gu.add( itr )
+          now_gu.add( itr, event.is_event_in_user(itr) )
         end
       end
     end

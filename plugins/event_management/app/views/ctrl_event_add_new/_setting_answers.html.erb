@@ -6,7 +6,8 @@
   <%= fields_for itr do |f| %>
 	<p>
 		  <!-- 回答項目 -->
-		  <%= f.text_field :answer_subject, :size => "10" %>
+		  <%#<%= f.text_field :answer_subject, :size => "10" %>
+		  <%= text_field "", "", { :value => itr.answer_subject, :size => "10", :name => "answer_subjects[]" } %>
 		
 		  <%= link_to l(:label_deleted), 
 			  {
