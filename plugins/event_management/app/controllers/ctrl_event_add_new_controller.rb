@@ -70,6 +70,7 @@ class CtrlEventAddNewController < ApplicationController
 		
 		# 回答者セットアップ.
 		event_check_user_ids = params[:event_check_user_ids]
+		event_check_user_ids << User.current.id
 		if event_check_user_ids != nil 
 			event_check_user_ids.each do |itr|
 				new_user = EventUser.new
@@ -169,6 +170,11 @@ class CtrlEventAddNewController < ApplicationController
     end
     
     def add( user, is_check )
+			# @note ここに書いていいのか？.
+			if user.id == User.current.id
+				then return;
+			end
+			
 			new_user = EventGroupUser.new 
 			new_user.setup( user, is_check )
 			@users << new_user

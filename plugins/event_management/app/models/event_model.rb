@@ -20,8 +20,11 @@ class EventModel < ActiveRecord::Base
 	validates :event_place,
 		:presence => true
 
-	
+	#----------------------------------.
 	# 以下サポートメソッド的な.
+	#----------------------------------.
+	
+	# このイベントにこのユーザーが含まれているか？.
 	def is_event_in_user( user_id )
 		ret = false
 		now_check_user_id = user_id.to_i
@@ -32,6 +35,13 @@ class EventModel < ActiveRecord::Base
 		end
 #		return event_users.exists?( :user_id => now_check_user_id )
 		return false
+	end
+	
+	
+	# このイベントはこのユーザーに開放されているか？.
+	def is_open_event( user_id )
+		# @note あとで公開設定まわり作るときはこの関数をいじろう.
+		return is_event_in_user( user_id )
 	end
 	
 end

@@ -35,6 +35,14 @@ class CtrlEventTopController < ApplicationController
 			else
 				@now_project_events = EventModel.find(:all, :conditions => ["project_id = #{@project.id} "])
 			end
+			
+			this_user_id = User.current.id
+			@now_project_events.each do |ev| 
+				if ( !ev.is_open_event( this_user_id ) ) 
+					@now_project_events.destroy(ev)
+				end
+			end
+			
 			@now_project_events_users = Hash.new
 			@now_project_events.each do |ev| 
 				user = @project.principals.find(ev.event_owner_id)
@@ -49,7 +57,6 @@ class CtrlEventTopController < ApplicationController
 		EventModel.destroy_all
 		EventAnswerData.destroy_all
 		EventUserAnswer.destroy_all
-		EventUserTable.destroy_all
 		redirect_to :action => "index", :project_id => @project
 	end
   
