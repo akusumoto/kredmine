@@ -4,7 +4,7 @@ class EventAnswerData < ActiveRecord::Base
 	
 	def self.new_answer
 		now_answer = EventAnswerData.new
-		now_answer.on_created_time = Time.now.to_s(:db)
+		now_answer.on_created_time = Time.now.to_s(:rfc822) + Time.now.usec.to_s
 		return now_answer
 	end
 	
