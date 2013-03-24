@@ -8,9 +8,9 @@ class EventModel < ActiveRecord::Base
 	validates :event_caption,
 		:presence => true
 	
-	def is_event_in_user( user )
+	def is_event_in_user( user_id )
 		ret = false
-		now_check_user_id = user.id.to_i
+		now_check_user_id = user_id.to_i
 		event_users.each do |itr|
 			if itr.user_id == now_check_user_id 
 				return true

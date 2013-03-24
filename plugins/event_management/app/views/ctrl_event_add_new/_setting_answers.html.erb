@@ -12,7 +12,7 @@
 		  <%= link_to l(:label_deleted), 
 			  {
 				:project_id => @project,
-				:now_delete_answer => itr.id,
+				:now_delete_answer_created_time => itr.on_created_time,
 				:remote => true,
 				:action => "delete_answer"
 			  }

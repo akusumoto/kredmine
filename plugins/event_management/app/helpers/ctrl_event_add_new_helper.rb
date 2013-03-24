@@ -3,7 +3,7 @@ module CtrlEventAddNewHelper
 # 「はい」モデル生成.
 #---------------------------------------------.
   def createAnswer_YES()
-    now_answer = EventAnswerData.new
+    now_answer = EventAnswerData.new_answer
     now_answer.answer_subject = l(:label_default_answer_yes)
     return now_answer
   end
@@ -12,7 +12,7 @@ module CtrlEventAddNewHelper
 # 「いいえ」モデル生成.
 #---------------------------------------------.
   def createAnswer_NO()
-    now_answer = EventAnswerData.new
+    now_answer = EventAnswerData.new_answer
     now_answer.answer_subject = l(:label_default_answer_no)
     return now_answer
   end
@@ -21,7 +21,7 @@ module CtrlEventAddNewHelper
 # 「空のモデル」モデル生成.
 #---------------------------------------------.
   def createAnswer_Empty()
-    now_answer = EventAnswerData.new
+    now_answer = EventAnswerData.new_answer
     now_answer.answer_subject = l(:label_default_answer_empty)
     return now_answer
   end

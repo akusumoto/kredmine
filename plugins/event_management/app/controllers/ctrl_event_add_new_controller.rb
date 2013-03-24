@@ -118,23 +118,35 @@ class CtrlEventAddNewController < ApplicationController
   def delete_answer
 		#@event = session[:event]
 		@event = $g_event
-		@now_delete_ans_id = params[:now_delete_answer]
-		now_delete_answer = @event.event_answer_datas.find( @now_delete_ans_id )
-		@event.event_answer_datas.delete(now_delete_answer)
-   # now_delete_answer.destroy()
-		setup_user_datas()
+		@now_delete_ans_createdtime = params[:now_delete_answer_created_time]
+		now_delete_answer = nil
+		@event.event_answer_datas.each do |itr|
+			if itr.on_created_time == @now_delete_ans_createdtime
+				now_delete_answer = itr;
+				break;
+			end
+		end
+	#	now_delete_answer = @event.event_answer_datas.find( :conditions => [ "on_created_time == #{@now_delete_ans_createdtime}" ] )
+		if now_delete_answer != nil 
+			@event.event_answer_datas.delete(now_delete_answer)
+		end
+		
+   	setup_user_datas()
   end
 
-
+	
+#---------------------------------------------.
+# 以下ヘルパー行き予定.
+#---------------------------------------------.
 	def setup_user_datas()
-	  if @now_project_group_list.blank? then
-        @now_project_group_list = GroupUserList.new
-        @now_project_group_list.setup( @project, @event )
-    end
+		if @now_project_group_list.blank? then
+			@now_project_group_list = EventGroupList.new
+			@now_project_group_list.setup( @project, @event )
+		end
 	end
 
-	# 名前が段々適当になっていく...
-	class GroupInUser
+
+	class EventGroupUser
 		def setup( user_a, is_check_a )
 			@user = user_a
 			@is_check = is_check_a
@@ -149,7 +161,7 @@ class CtrlEventAddNewController < ApplicationController
 		end
 	end
 	
-  class GroupUser
+  class EventGroup
     def setup( group_id, name )
       @group = group_id
       @users = Array.new
@@ -157,7 +169,7 @@ class CtrlEventAddNewController < ApplicationController
     end
     
     def add( user, is_check )
-			new_user = GroupInUser.new 
+			new_user = EventGroupUser.new 
 			new_user.setup( user, is_check )
 			@users << new_user
     end
@@ -176,22 +188,26 @@ class CtrlEventAddNewController < ApplicationController
     
    end
   
-  class GroupUserList
+  class EventGroupList
     
      def setup( project, event )
       @users = Hash.new
       @group_users = Array.new
       group_users_check = Hash.new
-      @now_users =  Project.find(project.id).principals.find(:all)
+      @now_users = Project.find(project.id).principals.find(:all)
       @now_users.each do |itr|
-        if !@users.key(itr.id) then
+				if itr.type != "User"
+					next;
+				end
+				
+				if !@users.key(itr.id) then
           @users.store( itr.id, itr )
           # グループに属していない場合は non group userとして登録.
           if itr.groups.empty? then
             if group_users_check.key?( -1 ) then
               now_gu =group_users_check[ -1 ]
             else
-              now_gu = GroupUser.new
+              now_gu = EventGroup.new
               now_gu.setup( -1, "未割当グループ" )
               group_users_check.store( -1, now_gu )
               @group_users << now_gu
@@ -202,14 +218,14 @@ class CtrlEventAddNewController < ApplicationController
               if group_users_check.key?( group.id ) then
                 now_gu = group_users_check[ group.id ]
               else
-                now_gu = GroupUser.new
+                now_gu = EventGroup.new
                 now_gu.setup( group.id, group.name )
                 group_users_check.store( group.id, now_gu )
                 @group_users << now_gu
               end
             end
           end
-          now_gu.add( itr, event.is_event_in_user(itr) )
+          now_gu.add( itr, event.is_event_in_user(itr.id) )
         end
       end
     end

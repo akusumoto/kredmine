@@ -10,12 +10,16 @@ class CtrlEventTopController < ApplicationController
   def index
 		session[:event] = nil
     # このプロジェクトに属する全イベントを取得する.
-    @now_project_events = EventModel.find(:all, :conditions => ["project_id = #{@project.id} "])
-		@now_project_events_users = Hash.new
-		@now_project_events.each do |ev| 
-			user = @project.principals.find(ev.event_owner_id)
-			@now_project_events_users.store( ev.event_owner_id, user)
+		begin 
+			@now_project_events = EventModel.find(:all, :conditions => ["project_id = #{@project.id} "])
+			@now_project_events_users = Hash.new
+			@now_project_events.each do |ev| 
+				user = @project.principals.find(ev.event_owner_id)
+				@now_project_events_users.store( ev.event_owner_id, user)
+			end
+		rescue ActiveRecord::RecordNotFound
 		end
+		
   end
 
 #---------------------------------------------.
