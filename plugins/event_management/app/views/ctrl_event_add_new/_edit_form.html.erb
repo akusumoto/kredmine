@@ -15,16 +15,15 @@
 	
 	<!-- 開催日 -->
 	<p>
-	<label for='event_date'><%= l(:field_event_date) %></label>
-	<%#<%= text_field_tag "event_date", "", :size => 10 %><%#<%= calendar_for('event_date') %>
-	<%= form.text_field :event_date, :size => 10 %><%= calendar_for('event_model_event_date') %>
+	<%= form.text_field :event_date, :size => 10, :required => true %>
+	<%= calendar_for('event_model_event_date') %>
 	</p>
 
     <!-- 最寄り駅 -->
-	<p><%= form.text_field :event_place_station, :size => 20 %></p>
+	<p><%= form.text_field :event_place_station, :size => 20, :required => true %></p>
 
 	<!-- 場所 -->
-	<p><%= form.text_field :event_place, :size => 100 %></p>
+	<p><%= form.text_field :event_place, :size => 100, :required => true %></p>
 
 	<!-- 本文 -->
 	<p>
