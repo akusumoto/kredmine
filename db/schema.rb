@@ -221,10 +221,9 @@ ActiveRecord::Schema.define(:version => 20121026003537) do
   end
 
   create_table "event_user_answers", :force => true do |t|
-    t.integer "event_user_answer_id", :null => false
-    t.integer "event_answer_data_id", :null => false
-    t.integer "event_id",             :null => false
-    t.integer "answer_user_id",       :null => false
+    t.integer "event_model_id"
+    t.integer "event_answer_data_id"
+    t.integer "answer_user_id"
     t.string  "comment"
   end
 

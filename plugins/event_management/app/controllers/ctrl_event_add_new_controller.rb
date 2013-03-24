@@ -62,29 +62,26 @@ class CtrlEventAddNewController < ApplicationController
 		# 回答情報セットアップ.
 		# @note もうこれでいいや...
 		event_subjects = params[:answer_subjects]
-		event_subjects.each do |itr|
-			new_answer = EventAnswerData.new
-			new_answer.answer_subject = itr
-			@event.event_answer_datas << new_answer
+		if ( event_subjects != nil )
+			event_subjects.each do |itr|
+				@event.event_answer_datas << EventAnswerData.new_answer(itr)
+			end
 		end
 		
 		# 回答者セットアップ.
 		event_check_user_ids = params[:event_check_user_ids]
-		event_check_user_ids << User.current.id
-		if event_check_user_ids != nil 
-			event_check_user_ids.each do |itr|
-				new_user = EventUser.new
-				new_user.user_id = itr
-				@event.event_users << new_user
+		if ( event_check_user_ids != nil )
+			if event_check_user_ids != nil 
+				event_check_user_ids.each do |itr|
+					@event.event_users << EventUser.new_user(itr)
+				end
 			end
 		end
+		@event.event_users << EventUser.new_user(User.current.id)
 		
 		# セーブが成功したかチェック.
 		#is_success = ( request.post? and form_answers.length > 0 and @event.save )
-		is_exist_event_check_user = event_check_user_ids != nil && event_check_user_ids.length > 0
-		is_exist_answer_data = event_subjects != nil && event_subjects.length > 0
-		is_success = ( request.post? && @event.save && is_exist_event_check_user && is_exist_answer_data )
-		
+		is_success = ( request.post? && @event.save )
 		if is_success
 				# 成功したらそのまま詳細画面に飛ばす.
 			  $g_event = nil

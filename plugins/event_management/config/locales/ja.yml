@@ -29,8 +29,9 @@ ja:
   label_answer_condition: 回答状況
   label_answer_num: 回答数
   label_answer_value: "%{now}/%{max}"
- 
-    
+  label_answer_select: 回答選択
+  label_answer_memo: メモ
+  label_answer_button: 回答する
   
 #===========================.
 # filed.

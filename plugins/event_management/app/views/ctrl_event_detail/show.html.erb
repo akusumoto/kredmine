@@ -3,7 +3,6 @@
 <p class="author">
   <%= l(:label_added_time, @event_owner.name + " が" + format_time(@event.created_on) ).html_safe %>
 </p>
-
 		
 <div class="editable details">
   <div class="issue">
@@ -42,5 +41,29 @@
 		<%= textilizable @event.event_caption %>	
 	  </div>
     </div>
+	
   </div>
+  
+  
+  <%# 回答欄 %>
+  <div class="box tabular">
+	<%= form_for( @event_this_answer, {:url => {:action => "answer", :project_id => @project, :event => @event}, :remote => true } ) do |f| %>
+	  <%# 回答 %>
+	  <div><strong><%= l(:label_answer_select) %></strong></div>
+	  <%= f.select :event_answer_data_id, @event.event_answer_datas.map{ |t| [t.answer_subject, t.id]} %>
+	  </br>
+
+	  <%# メモ %>
+	  <div><strong><%= l(:label_answer_memo) %></strong></div>
+	  <%= f.text_area :comment, :size => "40x5" %>
+	  </br>
+
+	  <%# 回答ボタン %>
+	  <%= f.submit l(:label_answer_button) %>
+	<% end %>
+  </div>
+  
+  
+  <%# %>
+  
 </div>

@@ -1,8 +1,9 @@
 class EventModel < ActiveRecord::Base
   unloadable
 	# 定義周り.
-  has_many :event_answer_datas, :dependent => :destroy
-  has_many :event_users, :dependent => :destroy
+  has_many :event_answer_datas, :dependent => :delete_all
+  has_many :event_users, :dependent => :delete_all
+	has_many :event_user_answers, :dependent => :delete_all
 	
 	# 入力チェック周り.
 	validates :event_subject,
@@ -19,7 +20,12 @@ class EventModel < ActiveRecord::Base
 		:presence => true
 	validates :event_place,
 		:presence => true
-
+	validates_length_of :event_answer_datas,
+		 :minimum => 1
+	validates_length_of :event_users,
+		 :minimum => 1
+	
+	
 	#----------------------------------.
 	# 以下サポートメソッド的な.
 	#----------------------------------.

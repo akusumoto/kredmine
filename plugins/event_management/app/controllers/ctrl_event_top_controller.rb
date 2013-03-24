@@ -13,6 +13,9 @@ class CtrlEventTopController < ApplicationController
 		@now_order = "ASC"
 		order_field = "event_subject"
 		setup_now_project_events(@now_order, order_field)
+		
+		# このイベントの回答選択肢を列挙.
+				
   end
 
 	def sort
@@ -24,8 +27,13 @@ class CtrlEventTopController < ApplicationController
 		else		
 			@now_order = "DESC" 
 		end
-  	puts(@now_order)
 	end
+	
+	
+#------------------------------------.
+# 以下ユーティリティ的なもの.
+#------------------------------------.
+	
 	
 	# このプロジェクトに属する全イベントを取得する.
 	def setup_now_project_events( now_order, order_field )
