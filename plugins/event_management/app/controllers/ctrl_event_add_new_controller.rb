@@ -47,8 +47,18 @@ class CtrlEventAddNewController < ApplicationController
 # データ編集画面.
 #---------------------------------------------.
   def edit
-  end
- 
+		$g_event = EventModel.find( params[:event] )
+		redirect_to :action => 'new', :project_id => @project
+	end
+
+#---------------------------------------------.
+# データコピーして新規.
+#---------------------------------------------.
+  def copy
+		$g_event = EventModel.new( EventModel.find(params[:event]) )
+		redirect_to :action => 'new', :project_id => @project
+	end
+
   
 #---------------------------------------------.
 # データ追加メソッド.

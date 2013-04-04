@@ -64,6 +64,14 @@
 	<% end %>
   </div>
   
+  <%# 各種ボタン %>
+  <div class="contextual">
+	<%= link_to_if_authorized(l(:button_update), {:controller => 'ctrl_event_add_new', :action => 'edit', :event => @event.id, :project_id => @project }, :class => 'icon icon-edit') %>
+	<%= link_to_if_authorized(l(:button_copy), {:controller => 'ctrl_event_add_new', :action => 'copy', :event => @event.id, :project_id => @project}, :class => 'icon icon-copy') %>
+	<%= "　　" %>
+	<%= link_to l(:button_delete), { :controller => "ctrl_event_top", :action => "destroy", :event => @event.id, :project_id => @project }, {:confirm => l(:label_event_delete_check, :name => @event.event_subject)}, :class => 'icon icon-del' %>
+  </div>
+
   
   <%# 回答状況一覧 %>
   <h3><%= l(:label_answer_list_title) %></strong></h3>

@@ -31,6 +31,12 @@ class CtrlEventTopController < ApplicationController
 	end
 	
 	
+	def destroy
+		@event = EventModel.find( params[:event] );
+		@event.destroy();
+		redirect_to "index", :project_id => @project
+	end
+	
 #------------------------------------.
 # 以下ユーティリティ的なもの.
 #------------------------------------.

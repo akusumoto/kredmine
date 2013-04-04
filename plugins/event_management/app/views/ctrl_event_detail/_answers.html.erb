@@ -1,20 +1,22 @@
 <%= stylesheet_link_tag 'event_css', :plugin => 'event_management' %>
 <table>
   <% @now_project_group_list.get_group_users.each do |group| %>
-	<tr>
-	<td><h3><%= group.name %> </h3></td>
-	  <% group.get_users.each do |itr| %>
+	<% if group.get_users.count > 0 %>
 	  <tr>
-		<td><%= itr.user.name %></td>
-		<% if itr.get_answer_data != nil %>
-		  <td><strong class="event_user_answer"><%= itr.get_answer_data.answer_subject %></strong></td>
-		  <td><%= "　　　　" %><%= itr.get_user_answer.comment %></td>
-		<%else%>
-		  <td><strong class="event_user_non_answer"><%= l(:label_non_answer) %></strong></td>
-		<%end%>
-	  </tr>
-	<% end %>
+	  <td><h3><%= group.name %> </h3></td>
+		<% group.get_users.each do |itr| %>
+		<tr>
+		  <td><%= itr.user.name %></td>
+		  <% if itr.get_answer_data != nil %>
+			<td><strong class="event_user_answer"><%= itr.get_answer_data.answer_subject %></strong></td>
+			<td><%= "　　　　" %><%= itr.get_user_answer.comment %></td>
+		  <%else%>
+			<td><strong class="event_user_non_answer"><%= l(:label_non_answer) %></strong></td>
+		  <%end%>
+		</tr>
+	  <% end %>
 	  <tr><td height="20"><hr></td></tr>
-	</tr>
+	  </tr>
+	<%  end %>
   <% end %>
 </table>

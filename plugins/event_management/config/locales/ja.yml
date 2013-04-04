@@ -34,6 +34,7 @@ ja:
   label_answer_button: 回答する
   label_answer_list_title: イベント回答状況
   label_non_answer: 未回答
+  label_event_delete_check: "イベント %{name}を削除しますか？"
   
   
 #===========================.

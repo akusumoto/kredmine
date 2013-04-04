@@ -13,8 +13,8 @@ class CtrlEventDetailController < ApplicationController
 		@event = EventModel.find( params[:event] )
 		@event_owner = User.find(@event.event_owner_id)
 		@event_this_answer = get_this_user_answer( @event );
-		@now_project_group_list = create_user_datas( @project, @event );
-		bind_user_answer( @event );
+		@now_project_group_list = create_user_datas( @project, @event, true );
+		bind_user_answer( @event, @now_project_group_list );
 	end
 
 	# 回答情報送信.
@@ -22,8 +22,8 @@ class CtrlEventDetailController < ApplicationController
 		@event = EventModel.find( params[:event] )
 		@event_owner = User.find(@event.event_owner_id)
 		@event_this_answer = get_this_user_answer( @event );
-		@now_project_group_list = create_user_datas( @project, @event );
-		bind_user_answer( @event );
+		@now_project_group_list = create_user_datas( @project, @event, true );
+		bind_user_answer( @event, @now_project_group_list );
 		form_data = params[:event_user_answer]
 		if ( @event_this_answer.update_attributes!( form_data ) )
 #			puts( @event_this_answer.comment )
@@ -36,12 +36,21 @@ class CtrlEventDetailController < ApplicationController
 	end
 	
 	
-	# 回答情報とユーザーを関連付け.
-	def bind_user_answer( event )
+	
+#---------------------------------------------.
+#---------------------------------------------.
+#---------------------------------------------.
+#---------------------------------------------.
+private
+
+#---------------------------------------------.
+# 回答情報とユーザーを関連付け.
+#---------------------------------------------.
+	def bind_user_answer( event, group_lists )
 		#puts( "bind!!" )
 		#puts( event.id )
 					
-		@now_project_group_list.get_group_users.each do |group|
+		group_lists.get_group_users.each do |group|
 			group.get_users.each do |user|
 				begin
 					user_answer = EventUserAnswer.where( "answer_user_id = ? AND event_model_id = ?", user.user.id, event.id )[0]
@@ -58,11 +67,7 @@ class CtrlEventDetailController < ApplicationController
 		end
 	end
 	
-#---------------------------------------------.
-#---------------------------------------------.
-#---------------------------------------------.
-#---------------------------------------------.
-private
+	
 #---------------------------------------------.
 # このユーザーとイベントに関連した回答情報を取得.
 #---------------------------------------------.
@@ -84,8 +89,8 @@ private
 		
 		return event_this_answer;
 	end
-	
-	
+
+		
 #---------------------------------------------.
 # このプロジェクトの属する事を表す？.
 #---------------------------------------------.
@@ -129,9 +134,9 @@ private
 #---------------------------------.
 # 関数達.
 #---------------------------------.
-	def create_user_datas( project, event )
+	def create_user_datas( project, event, is_event_user_only )
 		list = EventGroupList.new
-		list.setup( project, event )
+		list.setup( project, event, is_event_user_only )
 		return list;
 	end
 
@@ -204,7 +209,7 @@ private
 #---------------------------------.
   class EventGroupList
     
-     def setup( project, event )
+     def setup( project, event, is_event_user_only )
 			@users = Hash.new
       @group_users = Array.new
       group_users_check = Hash.new
@@ -239,15 +244,19 @@ private
               end
             end
           end
-          now_gu.add( itr, event.is_event_in_user(itr.id) )
+					
+					is_in_event_user = event.is_event_in_user(itr.id);
+					if is_event_user_only
+						if is_in_event_user
+							now_gu.add( itr, is_in_event_user )
+						end
+					else 
+							now_gu.add( itr, is_in_event_user )
+					end
         end
       end
     end
-    
-    def get_nongroup_users
-      return @non_group_users
-    end
-    
+		
     def get_group_users
       return @group_users
     end
