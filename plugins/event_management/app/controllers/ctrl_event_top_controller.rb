@@ -14,15 +14,38 @@ class CtrlEventTopController < ApplicationController
 		@now_order = "ASC"
 		order_field = "event_subject"
 		setup_now_project_events(@now_order, order_field)
-		
-		# このイベントの回答選択肢を列挙.
-				
+		@now_user = User.current
   end
 
 	def sort
 		@now_order = params[:now_order]
 		order_field = params[:order_field]
-		setup_now_project_events( @now_order, order_field )
+		@now_user = User.current
+		
+		if order_field == "event_answer_state" || order_field == "event_answer_count"
+			setup_now_project_events( @now_order, nil )
+			
+			if order_field == "event_answer_state"
+					@now_project_events.sort!{ |a,b|
+						a_ans = 0
+						b_ans = 0
+						if a.is_answer_your( @now_user.id ) 
+							a_ans = a.get_user_answer( @now_user.id ).event_answer_data_id;	
+						end
+						if b.is_answer_your( @now_user.id )
+							b_ans = b.get_user_answer( @now_user.id ).event_answer_data_id;
+						end
+						if ( @now_order == "DESC" ) 
+							a_ans <=> b_ans 
+						else
+							b_ans <=> a_ans 
+						end
+					}
+			end
+		else 
+			setup_now_project_events( @now_order, order_field )
+		end
+		
 		if @now_order == "DESC"		
 			@now_order = "ASC"
 		else		
@@ -40,17 +63,14 @@ class CtrlEventTopController < ApplicationController
 #------------------------------------.
 # 以下ユーティリティ的なもの.
 #------------------------------------.
-	
-	
 	# このプロジェクトに属する全イベントを取得する.
 	def setup_now_project_events( now_order, order_field )
 		begin 
 			if ( order_field != nil && now_order != nil ) 
 				@now_project_events = EventModel.where(:project_id => @project.id ).order( " #{order_field} #{now_order}" )
 			else
-				@now_project_events = EventModel.find(:all, :conditions => ["project_id = #{@project.id} "])
+				@now_project_events = EventModel.find(:all, :conditions => {:project_id => @project.id})
 			end
-			
 			this_user_id = User.current.id
 			@now_project_events.each do |ev| 
 				if ( !ev.is_open_event( this_user_id ) ) 

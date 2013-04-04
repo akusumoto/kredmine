@@ -245,7 +245,7 @@ private
             end
           end
 					
-					is_in_event_user = event.is_event_in_user(itr.id);
+					is_in_event_user = event.is_open_event(itr.id);
 					if is_event_user_only
 						if is_in_event_user
 							now_gu.add( itr, is_in_event_user )

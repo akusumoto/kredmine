@@ -50,4 +50,36 @@ class EventModel < ActiveRecord::Base
 		return is_event_in_user( user_id )
 	end
 	
+	
+	# このイベントの現在回答数取得.
+	def get_event_answercount_now
+		return event_user_answers.count
+	end
+	
+	# このイベントの最大回答数取得.
+	def get_event_answercount_max
+		return event_users.count
+	end
+	
+	
+	# このユーザーが回答しているか否か.
+	def is_answer_your( user_id )
+		return event_user_answers.exists?( :answer_user_id => user_id )
+	end
+	
+	# このユーザーの回答を取得.
+	def get_user_answer( user_id )
+		return event_user_answers.find( :first, :conditions => ["answer_user_id = ?", user_id] )
+	end
+	
+	# このユーザーの回答となる回答元データを取得.
+	def get_answerdata_of_user( user_id )
+		ans = get_user_answer( user_id )
+		if ans == nil 
+			return nil;
+		end
+		return event_answer_datas.find( :first, :conditions => ["id = ?", ans.event_answer_data_id ] )
+	end
+	
+	
 end

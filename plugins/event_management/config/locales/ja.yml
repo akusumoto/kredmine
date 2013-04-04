@@ -46,4 +46,5 @@ ja:
   field_event_place: 場所
   field_event_place_station: 最寄り駅
   field_event_owner_id: 開催者
-  
+  field_event_answer_count: 現在の回答数
+  field_event_answer_state: あなたの回答状況

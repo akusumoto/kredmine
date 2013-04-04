@@ -10,3 +10,12 @@
 	strong.event_user_answer {
 		color: #5555ff
 	}
+	
+	
+	
+/* ===================== TOP‰æ–Ê ======================= */
+/*	table.list { border: 1px solid #e4e4e4;  border-collapse: collapse; width: 100%; margin-bottom: 4px; } */
+	table.list tr.not_answer { background-color:#ffd0d0; padding: 4px; white-space:nowrap; }
+	table.list tr.odd td.answer { color: #5555ff; vertical-align: top; padding-right:10px; }
+	table.list tr.not_answer td.not_answer { color: #ff5555; vertical-align: top; padding-right:10px; }
+
