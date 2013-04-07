@@ -57,7 +57,12 @@ class CtrlEventAddNewController < ApplicationController
 # データコピーして新規.
 #---------------------------------------------.
   def copy
-		$g_event = EventModel.new( EventModel.find(params[:event]) )
+		$g_event = EventModel.find( params[:event])
+		@event = EventModel.new( $g_event.attributes )
+		$g_event.event_answer_datas.each do |itr|
+			@event.event_answer_datas << EventAnswerData.new_answer( itr.answer_subject )
+		end
+		$g_event = @event
 		redirect_to :action => 'new', :project_id => @project
 	end
 
