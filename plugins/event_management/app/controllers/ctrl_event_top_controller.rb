@@ -57,7 +57,9 @@ class CtrlEventTopController < ApplicationController
 	def destroy
 		@event = EventModel.find( params[:event] );
 		@event.destroy();
-		redirect_to "index", :project_id => @project
+		redirect_to :action => 'index', :project_id => @project
+	  rescue ActiveRecord::RecordNotFound
+			redirect_to :action => 'index', :project_id => @project
 	end
 	
 #------------------------------------.

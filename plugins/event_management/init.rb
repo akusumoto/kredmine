@@ -20,7 +20,7 @@ Redmine::Plugin.register :event_management do
                :caption => :label_event_rollsettings_manage, 
                :ctrl_event_top => [:new, :destroy], 
                :ctrl_event_detail => [:new, :destroy],
-               :ctrl_event_add_new => [:new, :destroy, :delete_answer, :add_answer, :add, :edit, :copy ],
+               :ctrl_event_add_new => [:new, :destroy, :delete_answer, :add_answer, :add, :edit, :copy, :end_edit ],
                :require => :member
   end
 

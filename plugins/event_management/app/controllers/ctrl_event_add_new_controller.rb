@@ -48,7 +48,9 @@ class CtrlEventAddNewController < ApplicationController
 #---------------------------------------------.
   def edit
 		$g_event = EventModel.find( params[:event] )
-		redirect_to :action => 'new', :project_id => @project
+		@event = $g_event
+		@now_project_group_list = create_user_datas_new( @project, @event );
+		render
 	end
 
 #---------------------------------------------.
@@ -64,54 +66,23 @@ class CtrlEventAddNewController < ApplicationController
 # データ追加メソッド.
 #---------------------------------------------.
   def add
-		# 戻ってきたハッシュデータを元にイベント再構築.
 		form_data = params[:event_model]
 		@event = EventModel.new( form_data )
-		@event.project_id = @project.id
-    @event.event_owner_id = User.current.id
-		@event.updated_on = Time.now.to_datetime
-		@event.created_on = @event.updated_on
-		
-		# 回答情報セットアップ.
-		# @note もうこれでいいや...
-		event_subjects = params[:answer_subjects]
-		if ( event_subjects != nil )
-			event_subjects.each do |itr|
-				@event.event_answer_datas << EventAnswerData.new_answer(itr)
-			end
-		end
-		
-		# 回答者セットアップ.
-		event_check_user_ids = params[:event_check_user_ids]
-		if ( event_check_user_ids != nil )
-			if event_check_user_ids != nil 
-				event_check_user_ids.each do |itr|
-					@event.event_users << EventUser.new_user(itr)
-				end
-			end
-		end
-		@event.event_users << EventUser.new_user(User.current.id)
-		
-		# セーブが成功したかチェック.
-		#is_success = ( request.post? and form_answers.length > 0 and @event.save )
-		is_success = ( request.post? && @event.save )
-		if is_success
-				# 成功したらそのまま詳細画面に飛ばす.
-			  $g_event = nil
-				flash[:notice] = l(:notice_successful_create)
-				redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
-		# セーブが失敗していればエラーメッセージ描画.
-		else
-				# 再リクエストで情報が吹っ飛んでしまうので再セットアップ.
-				$g_event = @event
-		  	@now_project_group_list = create_user_datas_new( @project, @event );
-
-				
-				render :action => "new", :project_id => @project, :event => @event
-		end
+		setup_event_data();
+		trans_next_state(@event.save)
   end
 
-	
+#---------------------------------------------.
+# データ編集完了メソッド.
+#---------------------------------------------.
+	def end_edit
+		form_data = params[:event_model]
+		@event = $g_event
+		@event.update_attributes!(form_data)
+		setup_event_data();
+		is_success = @event.save
+		trans_next_state(is_success)
+	end
 	  
 #---------------------------------------------.
 # 回答データ一件追加.
@@ -177,8 +148,63 @@ private
 	end
 	
 	
+	def setup_event_data() 
+		# 基本情報設定.
+		@event.project_id = @project.id
+    @event.event_owner_id = User.current.id
+		@event.updated_on = Time.now.to_datetime
+		@event.created_on = @event.updated_on
+		
+		# 回答情報再セットアップ.
+		event_subjects = params[:answer_subjects]
+		if ( event_subjects != nil )
+			if @event.event_answer_datas.count < event_subjects.count 
+				rest_len = event_subjects.count - @event.event_answer_datas.count
+				rest_len.times { |i|
+					@event.event_answer_datas << EventAnswerData.new_answer("hoge")
+				}
+			end
+			cnt = 0
+			event_subjects.each do |itr|
+				@event.event_answer_datas[cnt].answer_subject = itr;
+				@event.event_answer_datas[cnt].save
+				cnt = cnt + 1;
+			end
+		end
+		
+		# 回答者セットアップ.
+		event_check_user_ids = params[:event_check_user_ids]
+		if ( event_check_user_ids != nil )
+			if event_check_user_ids != nil 
+				event_check_user_ids.each do |itr|
+					if !@event.event_users.exists?( itr )
+						@event.event_users << EventUser.new_user(itr)
+					end
+				end
+			end
+		end
+		if !@event.event_users.exists?( User.current.id )
+			@event.event_users << EventUser.new_user(User.current.id)
+		end
+		
+	end
 	
 	
+	def trans_next_state( is_success_update )
+		# セーブが成功したかチェック.
+		if is_success_update
+				# 成功したらそのまま詳細画面に飛ばす.
+			  $g_event = nil
+				flash[:notice] = l(:notice_successful_create)
+				redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
+		else
+				# セーブが失敗していればエラーメッセージ描画.
+				$g_event = @event
+		  	@now_project_group_list = create_user_datas_new( @project, @event );
+				render :action => "new", :project_id => @project, :event => @event
+		end
+
+	end
 	
 	
 	

@@ -14,6 +14,7 @@ ja:
 # commons.
 #===========================.
   label_event_add_new: 新たなイベントを発行
+  label_event_update: 既存のイベントを編集
   label_default_answer_yes: 参加
   label_default_answer_no: 不参加
   label_default_answer_empty: 回答

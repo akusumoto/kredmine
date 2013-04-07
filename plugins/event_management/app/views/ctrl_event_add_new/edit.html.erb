@@ -1,6 +1,6 @@
-<h2><%=l(:label_event_add_new)%></h2>
+<h2><%=l(:label_event_update)%></h2>
 
-<%= form_for( @event, { :url => @event, :event => @event, :project_id => @project, :id => 'event-form', :method => "post" }) do |f| %>
-	<%= render :partial => 'form', :locals => {:form => f} %>
-	<%= f.submit l(:button_create), :action => "add" %>
+<%= labelled_form_for( @event, {:url => {:action => "end_edit", :project_id => @project}, :multipart => true, :id => 'event-form' }) do |f| %>
+    <%= render "edit_form", :form => f %>
+    <%= f.submit l(:button_create)  %>
 <% end %>
