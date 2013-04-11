@@ -43,6 +43,5 @@
     <% end %>
 
 	<!--ファイルを添付-->
-    <p><label><%= l(:label_attachment_plural) %></label></p>
-	<p><%= render 'attachments/form', :container => @message %></p>
+	<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
 </div>

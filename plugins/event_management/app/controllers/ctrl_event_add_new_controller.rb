@@ -2,6 +2,8 @@
 class CtrlEventAddNewController < ApplicationController
 	require_relative "../helpers/ctrl_util_helper.rb"
 	#include UtilHelper
+	helper :attachments
+  include AttachmentsHelper
 	
 	unloadable
   menu_item :event_menu
@@ -85,8 +87,7 @@ class CtrlEventAddNewController < ApplicationController
 		@event = $g_event
 		@event.update_attributes!(form_data)
 		setup_event_data();
-		is_success = @event.save
-		trans_next_state(is_success)
+		trans_next_state(@event.save)
 	end
 	  
 #---------------------------------------------.
@@ -199,6 +200,10 @@ private
 		# セーブが成功したかチェック.
 		if is_success_update
 				# 成功したらそのまま詳細画面に飛ばす.
+				Attachment.attach_files(@event, params[:attachments])
+		#		@event.attachment_with( params[:attachments] )
+		    render_attachment_warning_if_needed(@event)
+
 			  $g_event = nil
 				flash[:notice] = l(:notice_successful_create)
 				redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event

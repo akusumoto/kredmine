@@ -42,6 +42,11 @@
 	  </div>
     </div>
 	
+	<%# 添付ファイル %>
+	<% if @event.attachments.any? %>
+		<hr />
+		<%= link_to_attachments @event %>
+	<% end %>
   </div>
   
   

@@ -1,10 +1,12 @@
 class EventModel < ActiveRecord::Base
   unloadable
 	# 定義周り.
-  has_many :event_answer_datas, :dependent => :delete_all
+  belongs_to :project
+	has_many :event_answer_datas, :dependent => :delete_all
   has_many :event_users, :dependent => :delete_all
 	has_many :event_user_answers, :dependent => :delete_all
 	
+
 	# 入力チェック周り.
 	validates :event_subject,
 		:presence => true
@@ -25,6 +27,19 @@ class EventModel < ActiveRecord::Base
 	validates_length_of :event_users,
 		 :minimum => 1
 	
+
+	#----------------------------------.
+	# 添付ファイルを使用するためのもの.
+	#----------------------------------.
+	#acts_as_attachable :delete_permission => :manage_event_models
+	 acts_as_attachable ({
+    :dependent => :destroy,
+		:view_permission => :view,
+		:delete_permission => :manage
+  })
+	def project
+    Project.find(:first, :conditions => "projects.id = #{project_id}")
+  end
 	
 	#----------------------------------.
 	# 以下サポートメソッド的な.

@@ -81,6 +81,7 @@ class CtrlEventTopController < ApplicationController
 			end
 			
 			@now_project_events_users = Hash.new
+			@now_project_events_users.store( this_user_id, User.current )
 			@now_project_events.each do |ev| 
 				user = @project.principals.find(ev.event_owner_id)
 				@now_project_events_users.store( ev.event_owner_id, user)

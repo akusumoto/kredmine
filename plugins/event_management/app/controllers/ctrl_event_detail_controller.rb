@@ -2,6 +2,8 @@
 class CtrlEventDetailController < ApplicationController
 	#require_relative "../helpers/ctrl_util_helper.rb"
 	#include UtilHelper
+	helper :attachments
+  include AttachmentsHelper
 	
 	unloadable
   menu_item :event_menu
