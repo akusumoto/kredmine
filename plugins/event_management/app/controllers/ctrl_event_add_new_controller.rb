@@ -76,7 +76,8 @@ class CtrlEventAddNewController < ApplicationController
 		form_data = params[:event_model]
 		@event = EventModel.new( form_data )
 		setup_event_data();
-		trans_next_state(@event.save)
+		
+		trans_next_state(@event.save, true)
   end
 
 #---------------------------------------------.
@@ -87,7 +88,7 @@ class CtrlEventAddNewController < ApplicationController
 		@event = $g_event
 		@event.update_attributes!(form_data)
 		setup_event_data();
-		trans_next_state(@event.save)
+		trans_next_state(@event.save, false )
 	end
 	  
 #---------------------------------------------.
@@ -196,16 +197,19 @@ private
 	end
 	
 	
-	def trans_next_state( is_success_update )
+	def trans_next_state( is_success_update, is_send_mail )
+		
 		# セーブが成功したかチェック.
 		if is_success_update
 				# 成功したらそのまま詳細画面に飛ばす.
 				Attachment.attach_files(@event, params[:attachments])
-		#		@event.attachment_with( params[:attachments] )
 		    render_attachment_warning_if_needed(@event)
-
-			  $g_event = nil
 				flash[:notice] = l(:notice_successful_create)
+
+				if is_send_mail 
+					send_notification_mail(@event);
+				end
+				$g_event = nil
 				redirect_to :controller  => "ctrl_event_detail", :action => "show", :project_id => @project, :event => @event
 		else
 				# セーブが失敗していればエラーメッセージ描画.
@@ -239,6 +243,27 @@ private
 #---------------------------------.
 # 関数達.
 #---------------------------------.
+	# メール送信.
+	def send_notification_mail( event )
+		subject = l(:notification_mail_subject, :event_subject => event.event_subject )
+		now_users = Project.find(@project.id).principals.find(:all)
+		owner = nil
+		now_users.each do |user|
+			if user.id == event.event_owner_id
+				owner = user;
+				break;
+			end
+		end
+		now_users.each do |user|
+			if event.is_open_event( user.id )
+				EventMailer.send_call_event(user, owner, subject, event).deliver
+			end
+		end
+		
+	end
+	
+	
+	# ユーザーデータ生成.
 	def create_user_datas( project, event )
 		list = EventGroupList.new
 		list.setup( project, event )

@@ -36,7 +36,7 @@ ja:
   label_answer_list_title: イベント回答状況
   label_non_answer: 未回答
   label_event_delete_check: "イベント %{name}を削除しますか？"
-  
+  notification_mail_subject: "新規イベント通知：「 %{event_subject} 」"
   
 #===========================.
 # filed.
@@ -49,3 +49,8 @@ ja:
   field_event_owner_id: 開催者
   field_event_answer_count: 現在の回答数
   field_event_answer_state: あなたの回答状況
+  
+  
+#===========================.
+# text.
+#===========================.

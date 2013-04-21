@@ -1,0 +1,22 @@
+#******************************************#
+  redmineイベント通知
+#******************************************#
+「<%= @event.event_subject %>」が <%= @event_owner.name %> さんによって作成されました。
+早めの回答をお願いします。
+
+<%= url_for(:host => "http://133.242.145.43/redmine",
+            :controller => "ctrl_event_detail",
+            :action => "show",
+            :event => @event,
+			:project_id => @project
+             ) %>
+
+イベント名： <%= @event.event_subject %>
+開催日：     <%= @event.event_date.to_date.to_s(:db) %>
+場所：       <%= @event.event_place %>
+最寄り駅：   <%= @event.event_place_station %>
+
+本文：
+---------------------------------------------------------------------
+
+<%= @event.event_caption %>
