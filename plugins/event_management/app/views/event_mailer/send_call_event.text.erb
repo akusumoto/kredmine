@@ -4,7 +4,7 @@
 「<%= @event.event_subject %>」が <%= @event_owner.name %> さんによって作成されました。
 早めの回答をお願いします。
 
-<%= url_for(:host => "http://133.242.145.43/redmine",
+<%= url_for(:host => "133.242.145.43/redmine",
             :controller => "ctrl_event_detail",
             :action => "show",
             :event => @event,

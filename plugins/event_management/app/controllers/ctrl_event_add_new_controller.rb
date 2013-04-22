@@ -1,11 +1,11 @@
 # encoding: utf-8
 class CtrlEventAddNewController < ApplicationController
+	unloadable
 	require_relative "../helpers/ctrl_util_helper.rb"
 	#include UtilHelper
 	helper :attachments
   include AttachmentsHelper
 	
-	unloadable
   menu_item :event_menu
   before_filter :find_project, :authorize, :except => []
   layout 'standard'
@@ -256,7 +256,7 @@ private
 		end
 		now_users.each do |user|
 			if event.is_open_event( user.id )
-				EventMailer.send_call_event(user, owner, subject, event).deliver
+				EventMailer.send_call_event(user, owner, subject, event, @project).deliver
 			end
 		end
 		
