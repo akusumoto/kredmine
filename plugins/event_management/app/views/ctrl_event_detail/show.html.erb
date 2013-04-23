@@ -71,10 +71,15 @@
   
   <%# 各種ボタン %>
   <div class="contextual">
-	<%= link_to_if_authorized(l(:button_update), {:controller => 'ctrl_event_add_new', :action => 'edit', :event => @event.id, :project_id => @project }, :class => 'icon icon-edit') %>
+	<% if @event.event_owner_id == User.current.id %>
+	  <%= link_to_if_authorized(l(:button_update), {:controller => 'ctrl_event_add_new', :action => 'edit', :event => @event.id, :project_id => @project }, :class => 'icon icon-edit') %>
+	<% end %>
 	<%= link_to_if_authorized(l(:button_copy), {:controller => 'ctrl_event_add_new', :action => 'copy', :event => @event.id, :project_id => @project}, :class => 'icon icon-copy') %>
 	<%= "　　" %>
-	<%= link_to l(:button_delete), { :controller => "ctrl_event_top", :action => "destroy", :event => @event.id, :project_id => @project }, {:confirm => l(:label_event_delete_check, :name => @event.event_subject)}, :class => 'icon icon-del' %>
+	<% if @event.event_owner_id == User.current.id %>
+	  <%= link_to l(:button_delete), { :controller => "ctrl_event_top", :action => "destroy", :event => @event.id, :project_id => @project }, {:confirm => l(:label_event_delete_check, :name => @event.event_subject)}, :class => 'icon icon-del' %>
+	<% end %>
+	
   </div>
 
   
