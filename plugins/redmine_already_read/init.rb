@@ -13,5 +13,5 @@ Redmine::Plugin.register :redmine_already_read do
   author_url 'http://blog.livedoor.jp/ameya86/'
 
   # "活動"にチケットイベントとして登録
-  activity_provider :issues, :class_name => 'AlreadyRead'
+#  activity_provider :issues, :class_name => 'AlreadyRead'
 end
