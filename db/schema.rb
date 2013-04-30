@@ -13,6 +13,14 @@
 
 ActiveRecord::Schema.define(:version => 20121026003537) do
 
+  create_table "already_reads", :force => true do |t|
+    t.integer  "issue_id"
+    t.integer  "user_id"
+    t.datetime "created_on"
+  end
+
+  add_index "already_reads", ["issue_id", "user_id"], :name => "index_already_reads", :unique => true
+
   create_table "attachments", :force => true do |t|
     t.integer  "container_id"
     t.string   "container_type", :limit => 30
