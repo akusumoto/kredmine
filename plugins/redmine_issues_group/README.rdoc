@@ -1,3 +1,0 @@
-= Redmine Issues Group Plugin
-
-Description goes here
