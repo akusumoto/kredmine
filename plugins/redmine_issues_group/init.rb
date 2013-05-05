@@ -1,6 +1,5 @@
 require 'redmine'
 require 'query'
-require 'dispatcher'
 require 'issues_helper'
 require 'awesome_nested_set'
 require 'issues_helper_patch'
@@ -26,7 +25,7 @@ class RedmineIssuesParentListener < Redmine::Hook::ViewListener
   render_on :view_layouts_base_html_head, :inline => "<%= stylesheet_link_tag 'stylesheet', :plugin => 'redmine_issues_group' %>"
 end
 
-Dispatcher.to_prepare do
+ActionDispatch::Callbacks.to_prepare do 
 	IssuesHelper.send(:include, IssuesHelperPatch)
 	Issue.send(:include, IssueRelationPatch)
 	CollectiveIdea::Acts::NestedSet::InstanceMethods.send(:include, AwesomeNestedSetIssuesPatch)
