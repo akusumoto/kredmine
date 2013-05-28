@@ -69,16 +69,15 @@ class CtrlEventTopController < ApplicationController
 	def setup_now_project_events( now_order, order_field )
 		begin 
 			if ( order_field != nil && now_order != nil ) 
-				@now_project_events = EventModel.where(:project_id => @project.id ).order( " #{order_field} #{now_order}" )
+				@now_project_events = EventModel.joins(:event_users).
+                    where(:project_id => @project.id,
+                          'event_users.user_id' => User.current.id).order( " #{order_field} #{now_order}" )
 			else
-				@now_project_events = EventModel.find(:all, :conditions => {:project_id => @project.id})
+                @now_project_events = EventModel.joins(:event_users).
+                where(:project_id => @project.id,
+                      'event_users.user_id' => User.current.id)
 			end
 			this_user_id = User.current.id
-			@now_project_events.each do |ev| 
-				if ( !ev.is_open_event( this_user_id ) ) 
-					@now_project_events.destroy(ev)
-				end
-			end
 			
 			@now_project_events_users = Hash.new
 			@now_project_events_users.store( this_user_id, User.current )
