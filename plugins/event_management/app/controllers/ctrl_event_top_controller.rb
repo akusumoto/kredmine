@@ -71,11 +71,11 @@ class CtrlEventTopController < ApplicationController
 			if ( order_field != nil && now_order != nil ) 
 				@now_project_events = EventModel.joins(:event_users).
                     where(:project_id => @project.id,
-                          'event_users.user_id' => User.current.id).order( " #{order_field} #{now_order}" )
+                          'event_users.user_id' => User.current.id).order( " #{order_field} #{now_order}" ).uniq
 			else
                 @now_project_events = EventModel.joins(:event_users).
                 where(:project_id => @project.id,
-                      'event_users.user_id' => User.current.id)
+                      'event_users.user_id' => User.current.id).uniq
 			end
 			this_user_id = User.current.id
 			
