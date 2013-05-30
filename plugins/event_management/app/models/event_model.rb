@@ -73,7 +73,7 @@ class EventModel < ActiveRecord::Base
 	
 	# このイベントの最大回答数取得.
 	def get_event_answercount_max
-		return event_users.count
+		return event_users.count('user_id', :distinct => true)
 	end
 	
 	
