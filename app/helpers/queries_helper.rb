@@ -24,7 +24,8 @@ module QueriesHelper
 
   def filters_options(query)
     options = [[]]
-    sorted_options = query.available_filters.sort do |a, b|
+    #sorted_options = query.available_filters.sort do |a, b|
+    sorted_options = query.available_filters do |a, b|
       ord = 0
       if !(a[1][:order] == 20 && b[1][:order] == 20) 
         ord = a[1][:order] <=> b[1][:order]
