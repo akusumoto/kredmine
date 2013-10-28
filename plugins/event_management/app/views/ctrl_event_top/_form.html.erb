@@ -19,7 +19,7 @@
 			<td><%= link_to(itr.event_subject, 
 					{:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
 			<td><%= itr.event_date.to_date.to_s(:db) %></td>
-			<td><%= @now_project_events_users[itr.event_owner_id].name %></td>
+			<td><%= @now_project_events_users[itr.event_owner_id] ? @now_project_events_users[itr.event_owner_id].name : l(:label_user_anonymous) %></td>
 			<td><%= itr.event_place_station %> </td>
 			<td><%= l(:label_answer_value, :now => itr.get_event_answercount_now, :max => itr.get_event_answercount_max ) %></td>
 			<td class="answer"><%= itr.get_answerdata_of_user( @now_user.id ).answer_subject %></td>
@@ -29,7 +29,7 @@
 			<td><%= link_to(itr.event_subject, 
 					{:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
 			<td><%= itr.event_date.to_date.to_s(:db) %></td>
-			<td><%= @now_project_events_users[itr.event_owner_id].name %></td>
+			<td><%= @now_project_events_users[itr.event_owner_id] ? @now_project_events_users[itr.event_owner_id].name : l(:label_user_anonymous) %></td>
 			<td><%= itr.event_place_station %> </td>
 			<td><%= l(:label_answer_value, :now => itr.get_event_answercount_now, :max => itr.get_event_answercount_max ) %>
 			<td class="not_answer"><%= l(:label_non_answer) %>

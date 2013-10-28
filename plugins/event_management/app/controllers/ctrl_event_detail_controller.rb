@@ -13,7 +13,11 @@ class CtrlEventDetailController < ApplicationController
 	# 表示処理.
 	def show
 		@event = EventModel.find( params[:event] )
-		@event_owner = User.find(@event.event_owner_id)
+		begin
+			@event_owner = User.find(@event.event_owner_id)
+		rescue
+			@event_owner = nil
+		end
 		@event_this_answer = get_this_user_answer( @event );
 		@now_project_group_list = create_user_datas( @project, @event, true );
 		bind_user_answer( @event, @now_project_group_list );
@@ -22,7 +26,11 @@ class CtrlEventDetailController < ApplicationController
 	# 回答情報送信.
 	def answer
 		@event = EventModel.find( params[:event] )
-		@event_owner = User.find(@event.event_owner_id)
+		begin
+			@event_owner = User.find(@event.event_owner_id)
+		rescue
+			@event_owner = nil
+		end
 		@event_this_answer = get_this_user_answer( @event );
 		@now_project_group_list = create_user_datas( @project, @event, true );
 		bind_user_answer( @event, @now_project_group_list );

@@ -82,8 +82,12 @@ class CtrlEventTopController < ApplicationController
 			@now_project_events_users = Hash.new
 			@now_project_events_users.store( this_user_id, User.current )
 			@now_project_events.each do |ev| 
-				user = @project.principals.find(ev.event_owner_id)
-				@now_project_events_users.store( ev.event_owner_id, user)
+				begin
+					user = @project.principals.find(ev.event_owner_id)
+					@now_project_events_users.store( ev.event_owner_id, user)
+				rescue => e
+					p e.message
+				end
 			end
 		rescue ActiveRecord::RecordNotFound
 		end

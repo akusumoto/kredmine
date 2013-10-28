@@ -1,7 +1,7 @@
 <h2><%= @event.event_subject %></h2>
 
 <p class="author">
-  <%= l(:label_added_time, @event_owner.name + " が" + format_time(@event.created_on) ).html_safe %>
+  <%= l(:label_added_time, ( @event_owner ? @event_owner.name : l(:label_user_anonymous))+ " が" + format_time(@event.created_on) ).html_safe %>
 </p>
 		
 <div class="editable details">
