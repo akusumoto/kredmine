@@ -1,7 +1,7 @@
 <%= stylesheet_link_tag 'event_css', :plugin => 'event_management' %>
+<h2> イベント</h2>
 <pre>
   <code class="rhtml">
-	
 	<table class="list">
 	  <thead><tr>  
 		<th width ="100"><%=h link_to l(:field_subject),			  :order_field => "event_subject",		  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th>
@@ -30,6 +30,44 @@
 					{:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
 			<td><%= itr.event_date.to_date.to_s(:db) %></td>
 			<td><%= @now_project_events_users[itr.event_owner_id] ? @now_project_events_users[itr.event_owner_id].name : l(:label_user_anonymous) %></td>
+			<td><%= itr.event_place_station %> </td>
+			<td><%= l(:label_answer_value, :now => itr.get_event_answercount_now, :max => itr.get_event_answercount_max ) %>
+			<td class="not_answer"><%= l(:label_non_answer) %>
+		  </tr>
+		<% end %>
+	  <% end %>
+	  </tbody>	    
+	</table>
+	
+    <h3>終了したイベント</h3>
+	<table class="list">
+	  <thead><tr>  
+		<th width ="100"><%=h link_to l(:field_subject),			  :order_field => "event_subject",		  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th>
+		<th width ="1"><%=h link_to l(:field_event_date),			  :order_field => "event_date",			  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_owner_id),		  :order_field => "event_owner_id",		  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_place_station),	  :order_field => "event_place_station",  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_answer_count),  :order_field => "event_answer_count",  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_answer_state),	  :order_field => "event_answer_state",  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+	  </tr></thead>
+
+	  <tbody>
+	  <% @past_project_events.each do |itr| %>
+		<% if itr.is_answer_your( @now_user.id ) %>
+		  <tr class="odd">
+			<td><%= link_to(itr.event_subject, 
+					{:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
+			<td><%= itr.event_date.to_date.to_s(:db) %></td>
+			<td><%= @past_project_events_users[itr.event_owner_id] ? @past_project_events_users[itr.event_owner_id].name : l(:label_user_anonymous) %></td>
+			<td><%= itr.event_place_station %> </td>
+			<td><%= l(:label_answer_value, :now => itr.get_event_answercount_now, :max => itr.get_event_answercount_max ) %></td>
+			<td class="answer"><%= itr.get_answerdata_of_user( @now_user.id ).answer_subject %></td>
+		  </tr>
+		<% else %>
+		  <tr class="not_answer">
+			<td><%= link_to(itr.event_subject, 
+					{:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
+			<td><%= itr.event_date.to_date.to_s(:db) %></td>
+			<td><%= @past_project_events_users[itr.event_owner_id] ? @past_project_events_users[itr.event_owner_id].name : l(:label_user_anonymous) %></td>
 			<td><%= itr.event_place_station %> </td>
 			<td><%= l(:label_answer_value, :now => itr.get_event_answercount_now, :max => itr.get_event_answercount_max ) %>
 			<td class="not_answer"><%= l(:label_non_answer) %>
