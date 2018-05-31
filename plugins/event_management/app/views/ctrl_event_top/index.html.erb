@@ -15,7 +15,7 @@
 <%# リスト本体.%>
 <%#===========================================%>
 <%# リストが空の場合はデータが存在しない旨を伝える%>
-<% if (@now_project_events.blank?) %>
+<% if (@now_project_events.blank? && @past_project_events.blank?) %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 
 <%# 存在する場合は一覧を表示する.%>

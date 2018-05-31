@@ -2,6 +2,12 @@
 <h2> イベント</h2>
 <pre>
   <code class="rhtml">
+      <% if (@now_project_events.blank?) %>
+	<%# No event in the future %>
+        <p class="nodata">イベントはありません。</p>
+
+      <% else %>
+	<%# There are events in the future %>
 	<table class="list">
 	  <thead><tr>  
 		<th width ="100"><%=h link_to l(:field_subject),			  :order_field => "event_subject",		  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th>
@@ -38,7 +44,13 @@
 	  <% end %>
 	  </tbody>	    
 	</table>
-	
+      <% end %>
+
+    <% if (@past_project_events.blank?) %>
+    <%# No past evnet %>
+
+    <% else %>
+    <%# There are past evnets %>
     <h3>終了したイベント</h3>
 	<table class="list">
 	  <thead><tr>  
@@ -76,6 +88,7 @@
 	  <% end %>
 	  </tbody>	    
 	</table>
+    <% end %>
 	
   </code>
 </pre>
