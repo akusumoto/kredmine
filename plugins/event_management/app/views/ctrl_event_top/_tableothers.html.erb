@@ -1,0 +1,28 @@
+<% if (@other_project_events.blank?) %>
+	<%# No event in the future %>
+<% else %>
+	<%# There are events in the future %>
+    <h3>他の人のイベント（管理者用）</h3>
+	<table class="list">
+	  <thead><tr>  
+		<th width ="100"><%=h link_to l(:field_subject),			  :order_field => "event_subject",		  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th>
+		<th width ="1"><%=h link_to l(:field_event_date),			  :order_field => "event_date",			  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_owner_id),		  :order_field => "event_owner_id",		  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_place_station),	  :order_field => "event_place_station",  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+		<th width ="1"><%=h link_to l(:field_event_answer_count),  :order_field => "event_answer_count",  :action => 'sort', :project_id => @project, :remote => true, :now_order => @now_order %></th> 
+	  </tr></thead>
+
+	  <tbody>
+	  <% @other_project_events.each do |itr| %>
+		  <tr class="odd">
+			<td><%= link_to(itr.event_subject, 
+					{:controller => "ctrl_event_detail", :action=> "show", :project_id => @project, :event => itr.id} ) %></td>
+			<td><%= itr.event_date.to_date.to_s(:db) %></td>
+			<td><%= @other_project_events_users[itr.event_owner_id] ? @other_project_events_users[itr.event_owner_id].name : l(:label_user_anonymous) %></td>
+			<td><%= itr.event_place_station %> </td>
+			<td><%= l(:label_answer_value, :now => itr.get_event_answercount_now, :max => itr.get_event_answercount_max ) %></td>
+		  </tr>
+	  <% end %>
+	  </tbody>	    
+	</table>
+<% end %>
