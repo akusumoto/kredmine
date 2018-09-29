@@ -17,6 +17,7 @@
 #   event.date    : イベント日時    （例：2018/09/18）
 #   event.place   : イベント場所    （例：経堂南地区会館 大会議室）
 #   event.station : イベント最寄り駅（例：経堂駅）
+#   event.description : イベント詳細
 # user属性
 #   user.id       : ユーザID      （例：22）
 #   user.account  : ログインID    （例：CB_AKIRA）

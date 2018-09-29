@@ -52,7 +52,8 @@ def get_events(con, config):
  event_subject,
  event_date,
  event_place_station,
- event_place 
+ event_place,
+ event_caption
 FROM event_models
 WHERE
  DATE(event_date) = '%s'""" % (datetime.today() + timedelta(days=config['day_ago'])).strftime("%Y-%m-%d")
@@ -75,7 +76,8 @@ WHERE
 				'subject': row[1],
 				'date': row[2],
 				'station': row[3],
-				'place': row[4]
+				'place': row[4],
+				'description': row[5]
 			}
 			events.append(ev)
 
