@@ -1,0 +1,64 @@
+#+----+---------------------------+-------------------+
+#| id | name                      | identifier        |
+#+----+---------------------------+-------------------+
+#|  1 | Thanks! K Orchestra       | thanks_k          |
+#|  3 | システム開発              | system            |
+#|  4 | 実験＆練習場              | sand_box          |
+#|  5 | 0302ビバップライブ        | cb0302            |
+#|  7 | PCK                       | kk                |
+#|  8 | Kオケ運営                 | thanks_k_manage   |
+#| 10 | 演出部＆運営              | thanks_k_enshutsu |
+#+----+---------------------------+-------------------+
+
+# 差し込み
+# event属性
+#   event.id      : イベントID      （例：361）
+#   event.subject : イベント名      （例：合奏#1）
+#   event.date    : イベント日時    （例：2018/09/18）
+#   event.place   : イベント場所    （例：経堂南地区会館 大会議室）
+#   event.station : イベント最寄り駅（例：経堂駅）
+# user属性
+#   user.id       : ユーザID      （例：22）
+#   user.account  : ログインID    （例：CB_AKIRA）
+#   user.name     : 名前          （例：アキラ）
+#   user.part     : パート        （例：CB）
+#   user.mail     : メールアドレス（例：gkusumoto@gmail.com）
+
+# log
+#   level - debug, info, warning, error, critical
+#   size [byte]
+#   max 世代数
+setting:
+    from: notice@thanks-k.com
+    log:
+        file: /var/lib/redmine/log/reminder.log
+        level: info
+        format: '%(asctime)s %(levelname)s - %(message)s'
+        size: 5000000
+        max: 5
+remind:
+    - project: thanks_k
+      day_ago: 0
+      hour: 0
+      subject: 【前日リマインド】((#event.subject#))
+      body: |-
+        ((#user.name#))さん
+
+        明日のイベントのリマインドです。
+        
+        日時：((#event.date#))
+        イベント：((#event.subject#))
+        場所：((#event.place#))
+        最寄駅：((#event.station#))
+    - project: thanks_K
+      day_ago: 7
+      hour: 10
+      subject: 【リマインド】((#event.subject#))
+      body: |-
+        来週は以下のイベントが開催されます。
+        奮ってご参加ください。
+        
+        日時：((#event.date#))
+        イベント：((#event.subject#))
+        場所：((#event.place#))
+        最寄駅：((#event.station#))
