@@ -40,7 +40,26 @@ def connect(config):
 	)
 
 
+def check_params(config):
+	if 'project' not in config:
+		raise Exception("not 'project' param")
+	if 'day_ago' not in config:
+		raise Exception("not 'day_ago' param")
+	if 'hour' not in config:
+		raise Exception("not 'hour' param")
+	if 'subject' not in config:
+		raise Exception("not 'subject' param")
+	if 'body' not in config:
+		raise Exception("not 'body' param")
+
+	if type(config['day_ago']) is not int:
+		raise Exception("not numeric: 'day_ago' - %s" % str(config['day_ago']))
+	if type(config['hour']) is not int:
+		raise Exception("not numeric: 'hour' - %s" % str(config['day_ago']))
+		
+
 from datetime import datetime, timedelta
+import re
 
 def get_events(con, config):
 	#print "config=[" + str(config) + "]"
@@ -74,11 +93,22 @@ WHERE
 			ev = {
 				'id': int(row[0]),
 				'subject': row[1],
-				'date': row[2],
+				'date': row[2],		# datetime object
 				'station': row[3],
 				'place': row[4],
 				'description': row[5]
 			}
+
+			if 'event' in config and re.compile(config['event']).search(ev['subject']) == False:
+				logger.debug('not match "event" condition: %s' % ev['subject'])
+				continue
+			if 'event_exclude' in config and re.compile(config['event_exclude']).search(ev['subject']):
+				logger.debug('match "event_exclude" condition: %s' % ev['subject'])
+				continue
+			if ev['subject'].find('#noremind') >= 0 or ev['description'].find('#noremind') >= 0:
+				logger.debug('#noremind flag found: %s' % ev['subject'])
+				continue
+
 			events.append(ev)
 
 	finally:
@@ -247,6 +277,12 @@ n = 0
 # loop remind
 for remind in remind_conf['remind']:
 	n += 1
+
+	try:
+		check_params(remind)
+	except Exception as err:
+		logger.error('invalid remind config - item %d: %s' % (n, err))
+		continue
 
 	if remind['hour'] != current_hour:
 		logger.info('remind item %d: %s (still not remind time)' % (n, remind['subject']))

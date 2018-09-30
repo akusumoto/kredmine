@@ -17,7 +17,6 @@
 #   event.date    : イベント日時    （例：2018/09/18）
 #   event.place   : イベント場所    （例：経堂南地区会館 大会議室）
 #   event.station : イベント最寄り駅（例：経堂駅）
-#   event.description : イベント詳細
 # user属性
 #   user.id       : ユーザID      （例：22）
 #   user.account  : ログインID    （例：CB_AKIRA）
@@ -29,6 +28,15 @@
 #   level - debug, info, warning, error, critical
 #   size [byte]
 #   max 世代数
+
+# project       - required - プロジェクト名
+# event         - option   - 対象とするイベント名の正規表現。ない場合は全一致
+# event_exclude - option   - 除外するイベント名の正規表現
+# day_ago       - required - 何日前に通知するか（0以上）
+# hour          - required - 何時に通知するか（0〜23）
+# subject       - required - 通知メールの件名
+# body          - required - 通知メールの本文
+
 setting:
     from: notice@thanks-k.com
     log:
@@ -39,8 +47,9 @@ setting:
         max: 5
 remind:
     - project: thanks_k
-      day_ago: 0
-      hour: 0
+      event: '(合奏|分奏|練習)'
+      day_ago: 1
+      hour: 10
       subject: 【前日リマインド】((#event.subject#))
       body: |-
         ((#user.name#))さん
@@ -51,7 +60,7 @@ remind:
         イベント：((#event.subject#))
         場所：((#event.place#))
         最寄駅：((#event.station#))
-    - project: thanks_K
+    - project: thanks_k
       day_ago: 7
       hour: 10
       subject: 【リマインド】((#event.subject#))
