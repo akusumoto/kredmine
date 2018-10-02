@@ -66,6 +66,8 @@ def get_events(con, config):
 	if 'project' not in config:
 		raise Exception("'project' is not found")
 
+	hostname = get_hostname(con)
+
 	events_sql = """SELECT
  id,
  event_subject,
@@ -96,7 +98,8 @@ WHERE
 				'date': row[2],		# datetime object
 				'station': row[3],
 				'place': row[4],
-				'description': row[5]
+				'description': row[5],
+				'url': "https://%s/ctrl_event_detail/show?event=%d&project_id=%s" % (hostname, int(row[0]), config['project'])
 			}
 
 			if 'event' in config and re.compile(config['event']).search(ev['subject']) == False:
@@ -112,7 +115,7 @@ WHERE
 			events.append(ev)
 
 	finally:
-		cur.close
+		cur.close()
 
 	return events
 
@@ -157,9 +160,20 @@ def get_eventusers(con, event_id):
 			users.append(us)
 
 	finally:
-		cur.close
+		cur.close()
 
 	return users
+
+def get_hostname(con):
+	hostname_sql = "SELECT value FROM settings WHERE name = 'host_name'"
+	try:
+		cur = con.cursor()
+		cur.execute(hostname_sql)
+		hostname = cur.fetchone()[0]
+	finally:
+		cur.close()
+
+	return hostname
 
 def replace_tags(text, data, tag_prefix = None):
 	if tag_prefix is not None or len(tag_prefix) > 0:

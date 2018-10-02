@@ -17,6 +17,7 @@
 #   event.date    : イベント日時    （例：2018/09/18）
 #   event.place   : イベント場所    （例：経堂南地区会館 大会議室）
 #   event.station : イベント最寄り駅（例：経堂駅）
+#   event.url     : イベントページURL（例：https://private.thanks-k.com/redmine/ctrl_event_detail/show?event=379&project_id=thanks_k）
 # user属性
 #   user.id       : ユーザID      （例：22）
 #   user.account  : ログインID    （例：CB_AKIRA）
