@@ -51,6 +51,7 @@
   
   
   <%# 回答欄 %>
+  <% if @is_joined %>
   <div class="box tabular">
 	<%#<%= form_for( @event_this_answer, {:url => {:action => "answer", :project_id => @project, :event => @event}, :remote => true } ) do |f| %>
 	<%= form_for( @event_this_answer, {:url => {:action => "answer", :project_id => @project, :event => @event} } ) do |f| %>
@@ -68,6 +69,7 @@
 	  <%= f.submit l(:label_answer_button) %>
 	<% end %>
   </div>
+  <% end %>
   
   <%# 各種ボタン %>
   <div class="contextual">

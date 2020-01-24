@@ -21,6 +21,7 @@ class CtrlEventDetailController < ApplicationController
 		@event_this_answer = get_this_user_answer( @event );
 		@now_project_group_list = create_user_datas( @project, @event, true );
 		bind_user_answer( @event, @now_project_group_list );
+		@is_joined = @now_project_group_list.is_joined(User.current.id);
 	end
 
 	# 回答情報送信.
@@ -273,6 +274,17 @@ private
 		
 		def get_users
 			return @users
+		end
+
+		def is_joined(user_id)
+			@group_users.each do |group|
+				group.get_users.each do |user|
+					if user.user.id == user_id then
+						return true
+					end
+				end				
+			end
+			return false
 		end
 	end	
 end
