@@ -10,7 +10,7 @@ gem 'rack' , '1.4.1'
 
 # Optional gem for LDAP authentication
 group :ldap do
-  gem "net-ldap", "~> 0.3.1"
+  gem "net-ldap", "~> 0.16.2"
 end
 
 # Optional gem for OpenID authentication
